@@ -4,8 +4,8 @@ const socketIo = require('socket.io');
 const path = require('path');
 
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
+const client = http.createServer(app);
+const io = socketIo(client);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -24,8 +24,8 @@ io.on('connection', (socket) => {
     });
 });
 
-// Start the server
+// Start the client
 const PORT = 4000;
-server.listen(PORT, () => {
+client.listen(PORT, () => {
     console.log(`Frontend server is running on http://localhost:${PORT}`);
 });

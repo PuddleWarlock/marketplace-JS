@@ -6,24 +6,24 @@ const { logRequest } = require('./utils/logger');
 const cors = require('cors');
 
 
-const app = express();
+const server = express();
 
 // Connect to MongoDB
 connectDB();
 
 // Middlewares
-app.use(bodyParser.json());
-app.use(logRequest);
-app.use(cors({
+server.use(bodyParser.json());
+server.use(logRequest);
+server.use(cors({
     origin: 'http://localhost:4000', // Разрешаем запросы с этого домена
     methods: ['GET', 'POST','PUT','DELETE'],
 }));
 
 // Routes
-app.use('/api', routes);
+server.use('/api', routes);
 
 // Start server
 const PORT = 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
