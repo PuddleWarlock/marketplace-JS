@@ -7,14 +7,54 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Product Management</h1>
-    <div id="product-list"></div>
+<h1>Product Management</h1>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="script.js"></script>
+<!-- Add Product Form -->
+<section>
+    <h2>Add Product</h2>
+    <form id="add-product-form">
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="text" id="category" placeholder="Category" required>
+        <input type="number" id="price" placeholder="Price" required>
+        <input type="text" id="seller" placeholder="Seller" required>
+        <input type="number" id="quantity" placeholder="Quantity" required>
+        <button type="submit">Add Product</button>
+    </form>
+</section>
 
-    <div class="button-container">
-        <button class="button" onclick="DoSmth()">Press me</button>
-    </div>
+<!-- Edit Product Form -->
+<section>
+    <h2>Edit Product</h2>
+    <form id="edit-product-form">
+        <input type="text" id="edit-id" placeholder="Product ID" required>
+        <input type="text" id="edit-name" placeholder="New Name">
+        <input type="text" id="edit-category" placeholder="New Category">
+        <input type="number" id="edit-price" placeholder="New Price">
+        <input type="text" id="edit-seller" placeholder="New Seller">
+        <input type="number" id="edit-quantity" placeholder="New Quantity">
+        <button type="submit">Edit Product</button>
+    </form>
+</section>
+
+<!-- Search by ID -->
+<section>
+    <h2>Search Product</h2>
+    <input type="text" id="search-id" placeholder="Product ID">
+    <button onclick="searchProduct()">Search</button>
+</section>
+
+<!-- Filter by Price -->
+<section>
+    <h2>Filter by Price</h2>
+    <input type="number" id="min-price" placeholder="Min Price">
+    <input type="number" id="max-price" placeholder="Max Price">
+    <button onclick="filterProducts()">Filter</button>
+</section>
+
+<!-- Product List -->
+<div id="product-list"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
