@@ -27,6 +27,8 @@ const renderProducts = (products) => {
             <h3>${product.name}</h3>
             <p>Category: ${product.category}</p>
             <p>Price: $${product.price}</p>
+            <p>Seller: ${product.seller}</p>
+            <p>Stock: ${product.quantity}</p>
             <button onclick="deleteProduct('${product._id}')">Delete</button>
         `;
         productList.appendChild(card);
@@ -49,6 +51,12 @@ const deleteProduct = async (id) => {
         console.error('Error:', error);
     }
 };
+
+
+const DoSmth = () =>{
+    console.log("alsjkdhak")
+}
+
 
 // Listen for real-time updates
 socket.on('update', (data) => {
