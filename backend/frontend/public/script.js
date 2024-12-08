@@ -31,8 +31,22 @@ const renderProducts = (products) => {
             <p>Stock: ${product.quantity}</p>
             <button onclick="deleteProduct('${product._id}')">Delete</button>
         `;
+
+        // Add click event to populate the edit form
+        card.onclick = () => populateEditForm(product);
+
         productList.appendChild(card);
     });
+};
+
+// Populate the edit form with product data.txt
+const populateEditForm = (product) => {
+    document.getElementById('edit-id').value = product._id;
+    document.getElementById('edit-name').value = product.name;
+    document.getElementById('edit-category').value = product.category;
+    document.getElementById('edit-price').value = product.price;
+    document.getElementById('edit-seller').value = product.seller;
+    document.getElementById('edit-quantity').value = product.quantity;
 };
 
 // Delete a product
@@ -135,8 +149,8 @@ const searchProduct = async () => {
 
 // Filter products by price range
 const filterProducts = async () => {
-    const minPrice = Number(document.getElementById('min-price').value);
-    const maxPrice = Number(document.getElementById('max-price').value);
+    const minPrice = Number(document.getElementById('min-price').value)?Number(document.getElementById('min-price').value):0;
+    const maxPrice = Number(document.getElementById('max-price').value)?Number(document.getElementById('max-price').value):9999999;
 
     try {
         const response = await fetch(API_URL);
@@ -151,6 +165,45 @@ const filterProducts = async () => {
         console.error('Error filtering products:', error);
     }
 };
+
+
+// Fetch and display OS information
+const fetchOSInfo = async () => {
+    const API_URL = 'http://localhost:3000/api/info';
+    try {
+        const response = await fetch(`${API_URL}/os`);
+        const osInfo = await response.json();
+
+        displayInfo('OS Information', osInfo);
+    } catch (error) {
+        console.error('Error fetching OS info:', error);
+    }
+};
+
+// Fetch and display file information
+const fetchFileInfo = async () => {
+    const API_URL = 'http://localhost:3000/api/info';
+    try {
+        const response = await fetch(`${API_URL}/file`);
+        const fileInfo = await response.text();
+
+        displayInfo('File Information', fileInfo);
+    } catch (error) {
+        console.error('Error fetching file info:', error);
+    }
+};
+
+// Display fetched information
+const displayInfo = (title, info) => {
+    const infoDisplay = document.getElementById('info-display');
+    infoDisplay.innerHTML = `<h3>${title}</h3><pre>${JSON.stringify(info, null, 2)}</pre>`;
+};
+
+// Event listeners for buttons
+document.getElementById('os-info-btn').addEventListener('click', fetchOSInfo);
+document.getElementById('file-info-btn').addEventListener('click', fetchFileInfo);
+
+
 
 // Listen for real-time updates
 socket.on('update', (data) => {
