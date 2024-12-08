@@ -18,7 +18,7 @@ const getProductById = async (req, res) => {
         }
         res.status(200).json(product);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching product' });
+        res.status(500).json({ error: 'Error fetching product by Id' });
     }
 };
 
@@ -37,7 +37,7 @@ const updateProduct = async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
     try {
-        const updatedProduct = await Product.findByIdAndUpdate(id, updates, { new: true });
+        const updatedProduct = await Product.findByIdAndUpdate(id, updates);
         if (!updatedProduct) {
             return res.status(404).json({ error: 'Product not found' });
         }
@@ -60,10 +60,27 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+const sortProducts = async (req, res) => {
+    const { by } = req.query;
+
+    if (!['category', 'seller'].includes(by)) {
+        return res.status(400).json({ error: 'Invalid sort field' });
+    }
+
+    try {
+        const sortedProducts = await Product.find().sort({ [by]: 1 }); // Сортировка по возрастанию
+        res.json(sortedProducts);
+    } catch (error) {
+        console.error('Error sorting products:', error);
+        res.status(500).json({ error: 'Error sorting products' });
+    }
+};
+
 module.exports = {
     getProducts,
     getProductById,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    sortProducts
 };

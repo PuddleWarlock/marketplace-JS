@@ -29,6 +29,7 @@ const renderProducts = (products) => {
             <p>Price: $${product.price}</p>
             <p>Seller: ${product.seller}</p>
             <p>Stock: ${product.quantity}</p>
+            <p>Description: ${product.description}</p>
             <button onclick="deleteProduct('${product._id}')">Delete</button>
         `;
 
@@ -44,6 +45,7 @@ const populateEditForm = (product) => {
     document.getElementById('edit-id').value = product._id;
     document.getElementById('edit-name').value = product.name;
     document.getElementById('edit-category').value = product.category;
+    document.getElementById('edit-description').value = product.description;
     document.getElementById('edit-price').value = product.price;
     document.getElementById('edit-seller').value = product.seller;
     document.getElementById('edit-quantity').value = product.quantity;
@@ -73,6 +75,7 @@ document.getElementById('add-product-form').addEventListener('submit', async (e)
     const product = {
         name: document.getElementById('name').value,
         category: document.getElementById('category').value,
+        description: document.getElementById('description').value,
         price: Number(document.getElementById('price').value),
         seller: document.getElementById('seller').value,
         quantity: Number(document.getElementById('quantity').value),
@@ -105,10 +108,12 @@ document.getElementById('edit-product-form').addEventListener('submit', async (e
     const updatedProduct = {
         name: document.getElementById('edit-name').value || undefined,
         category: document.getElementById('edit-category').value || undefined,
+        description: document.getElementById('edit-description').value || undefined,
         price: document.getElementById('edit-price').value
             ? Number(document.getElementById('edit-price').value)
             : undefined,
         seller: document.getElementById('edit-seller').value || undefined,
+        updatedAt: new Date(),
         quantity: document.getElementById('edit-quantity').value
             ? Number(document.getElementById('edit-quantity').value)
             : undefined,
@@ -199,6 +204,28 @@ const displayInfo = (title, info) => {
     infoDisplay.innerHTML = `<h3>${title}</h3><pre>${JSON.stringify(info, null, 2)}</pre>`;
 };
 
+
+// Fetch and display sorted products
+const fetchSortedProducts = async (sortBy) => {
+    try {
+        const response = await fetch(`${API_URL}/sort?by=${sortBy}`);
+        const sortedProducts = await response.json();
+
+        renderProducts(sortedProducts);
+    } catch (error) {
+        console.error(`Error sorting products by ${sortBy}:`, error);
+    }
+};
+
+// Event listeners for sorting
+document.getElementById('sort-by-category-btn').addEventListener('click', () => {
+    fetchSortedProducts('category');
+});
+
+document.getElementById('sort-by-seller-btn').addEventListener('click', () => {
+    fetchSortedProducts('seller');
+});
+
 // Event listeners for buttons
 document.getElementById('os-info-btn').addEventListener('click', fetchOSInfo);
 document.getElementById('file-info-btn').addEventListener('click', fetchFileInfo);
@@ -206,10 +233,10 @@ document.getElementById('file-info-btn').addEventListener('click', fetchFileInfo
 
 
 // Listen for real-time updates
-socket.on('update', (data) => {
+/*socket.on('update', (data) => {
     console.log('Real-time update:', data);
     //fetchProducts();
-});
+});*/
 
 // Initial load
 fetchProducts();

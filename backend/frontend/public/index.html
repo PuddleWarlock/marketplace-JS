@@ -15,6 +15,7 @@
     <form id="add-product-form">
         <input type="text" id="name" placeholder="Name" required>
         <input type="text" id="category" placeholder="Category" required>
+        <input type="text" id="description" placeholder="Description" required>
         <input type="number" id="price" placeholder="Price" required>
         <input type="text" id="seller" placeholder="Seller" required>
         <input type="number" id="quantity" placeholder="Quantity" required>
@@ -29,6 +30,7 @@
         <input type="text" id="edit-id" placeholder="Product ID" required>
         <input type="text" id="edit-name" placeholder="New Name">
         <input type="text" id="edit-category" placeholder="New Category">
+        <input type="text" id="edit-description" placeholder="New Description">
         <input type="number" id="edit-price" placeholder="New Price">
         <input type="text" id="edit-seller" placeholder="New Seller">
         <input type="number" id="edit-quantity" placeholder="New Quantity">
@@ -61,6 +63,12 @@
     <button id="file-info-btn">Get File Info</button>
     <div id="info-display"></div>
 </div>
+
+<div>
+    <button id="sort-by-category-btn">Sort by Category</button>
+    <button id="sort-by-seller-btn">Sort by Seller</button>
+</div>
+
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="script.js"></script>
