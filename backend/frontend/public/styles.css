@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-
+    background-color: #f1f1f1;
 }
 
 header{
@@ -13,14 +13,15 @@ header{
 h1 {
     margin-top: 20px;
     margin-bottom: 20px;
-    color: #333;
+    background-color: #f1f1f1;
 }
 
 
 .content {
     display: flex;
+    justify-content: center;
     background-color: #f1f1f1;
-
+    /*height: 10000px;*/
 }
 
 .content_side__left {
@@ -28,28 +29,35 @@ h1 {
 }
 
 .content_center {
+    display: flex;
+    flex-basis: 1300px;
     flex-direction: column;
-    width: 1300px;
-    /margin: auto;
+    align-items: center;
 }
 
 .content_side__right {
+    width: 280px;
 }
 
 #product-list {
     display: flex;
     flex-wrap: wrap;
-    max-width: 900px;
+    justify-content: space-evenly;
+    max-width: 1000px;
     gap: 20px;
     padding: 20px;
 }
 
 .card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-items: center;
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
     width: 200px;
-    background: #fff;
+    background: #f1f1f1;
     text-align: center;
     padding: 10px;
     transition-duration: .5s;
@@ -64,41 +72,37 @@ h1 {
     transform: scale(.97);
 }
 
-.button-container {
-    display: flex;
-    width: 400px;
-    height: 200px;
-    align-items: end;
-}
-
 button{
     border: none;
-    background-color: lightgray;
+    flex-grow: 10;
+    /*background-color: lightgray;*/
+    box-shadow: darkgray 1px 1px 5px;
     border-radius: 5px;
-    /min-width: 65px;
-    min-height: 25px;
-    padding: 0 5px;
+    /*min-width: 65px*/;
+    height: 35px;
+    padding: 0 15px;
+    margin: 2px 5px;
+    transition-duration: .3s;
 }
 
 button:hover{
-    background-color: dimgray;
+    background-color: #e3e3e3;
+    transition-duration: .3s;
 }
 button:active{
-    transform: scale(.95);
+    /transform: scale(.95);
+    box-shadow: darkgray 0px 0px 1px;
+    transition-duration: .1s;
 }
 
-.button{
-    width: 60px;
-    height: 35px;
-}
 
-div, main, section, header{
+/*div, main, section, header{
     border: 1px red dashed;
-}
+}*/
 
 
 
-.func-section {
+.func-section__vertical {
     display: flex;
     flex-direction: column;
 }
@@ -106,67 +110,166 @@ div, main, section, header{
 
 
 input{
-    border: none;
+    border: darkgray 1px solid;
     min-height: 40px;
-    background-color: #e3e3e3;
-    border-radius: 5px;
+    background-color: #f1f1f1;
+    border-radius: 12px;
     padding-left: 10px;
 }
 
-.hidden-form input{
+.hidden-form__vertical input{
     margin-top: 5px;
 }
 
-label{
-    display: inline;
+label span{
+    padding-left: 10px;
 }
 
-.search-icon {
+.search-icon{
     width: 40px;
     height: 40px;
     margin: 0 20px 0 10px;
+    transition-duration: .3s;
 }
-
+.search-icon:hover{
+    transition-duration: .3s;
+    transform: scale(1.1);
+}
+.search-icon:active{
+    transition-duration: .3s;
+    transform: scale(.97);
+}
 .search {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f1f1f1;
 }
-/* Скрываем форму по умолчанию */
 
 /* Курсор указателя при наведении на заголовок */
 h2 {
-    cursor: pointer;
     padding: 20px 0;
+    background-color: #f1f1f1;
 }
 
-.hidden-form {
-    /*display: none;*/
-    /*margin-top: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    border-radius: 5px;*/
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.3s ease;
+.interactive{
+    cursor: pointer;
 }
 
 .input-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /align-items: center;
     margin: 5px 5px;
 }
 
-#toggle-form:hover{
+.toggle-form_container{
+    transition-duration: .3s;
+}
+/*.toggle-form_header:hover{
+    transition-duration: .3s;
     background-color: lightgray;
+}*/
+
+
+/* Наведение на контейнер или любой из его детей */
+.toggle-form_container:hover {
+    background-color: lightgray; /* Пример: изменение фона */
+    cursor: pointer;
+}
+
+/* Применение стилей для вложенных элементов */
+.toggle-form_container:hover .toggle-form_header,
+.toggle-form_container:hover .arrow-down-icon {
+    background-color: lightgray;
+    transition-duration: .3s /* Анимация для плавности */
+}
+
+/*.toggle-form_container:active .arrow-down-icon {
+    rotate: 90deg;
+}*/
+
+
+.hidden-form__vertical {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease;
+}
+.hidden-form{
+
+}
+
+.hidden-form__horizontal{
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease;
 }
 
 /* Анимация плавного появления */
 .visible {
     max-height: 600px;
-    transition: max-height 0.3s ease;
+    transition: max-height 0.5s ease;
 }
 
+.sticky {
+    position: sticky;
+    top: 0;
+}
+
+#search-id {
+    flex-basis: 100%;
+    margin-left: 20px;
+}
+
+.info {
+    position: relative;
+    bottom: 0;
+    right: 0;
+}
+
+.sort {
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+.sort button{
+    margin: 0 5px;
+}
+
+.filter button{
+    margin-top: 5px;
+}
+
+#toggle-form-button{
+    margin-bottom: 5px;
+}
+
+.arrow-down-icon {
+    width: 40px;
+    height: 40px;
+    transition-duration: .3s;
+    margin-right: 20px;
+}
+
+
+.drop-down {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-form_header {
+    transition-duration: .3s;
+}
+
+.search_section {
+    width: 100%;
+}
+
+.search_header {
+    padding-left: 20px;
+}
