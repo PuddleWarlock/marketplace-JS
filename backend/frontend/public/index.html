@@ -7,70 +7,114 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<h1>Product Management</h1>
+<header>
+    <h1>Product Management</h1>
+</header>
 
-<!-- Add Product Form -->
-<section>
-    <h2>Add Product</h2>
-    <form id="add-product-form">
-        <input type="text" id="name" placeholder="Name" required>
-        <input type="text" id="category" placeholder="Category" required>
-        <input type="text" id="description" placeholder="Description" required>
-        <input type="number" id="price" placeholder="Price" required>
-        <input type="text" id="seller" placeholder="Seller" required>
-        <input type="number" id="quantity" placeholder="Quantity" required>
-        <button type="submit">Add Product</button>
-    </form>
-</section>
+<main class="content">
+    <div class="content_side__left">
+        <!-- Edit Product Form -->
+        <section class="func-section">
+            <h2 id="toggle-form">Edit Product</h2>
+            <form id="edit-product-form" class="hidden-form ">
+                <label class="input-container">
+                    <span>ID</span>
+                <input type="text" id="edit-id" placeholder="Product ID" required>
+                </label>
+                <label class="input-container">
+                    <span>Name</span>
+                    <input type="text" id="edit-name" placeholder="New Name">
+                </label>
+                <label class="input-container">
+                    <span>Category</span>
+                    <input type="text" id="edit-category" placeholder="New Category">
+                </label>
+                <label class="input-container">
+                    <span>Description</span>
+                    <input type="text" id="edit-description" placeholder="New Description">
+                </label>
+                <label class="input-container">
+                    <span>Price</span>
+                    <input type="number" id="edit-price" placeholder="New Price">
+                </label>
+                <label class="input-container">
+                    <span>Seller</span>
+                    <input type="text" id="edit-seller" placeholder="New Seller">
+                </label>
+                <label class="input-container">
+                    <span>Quantity</span>
+                    <input type="number" id="edit-quantity" placeholder="New Quantity">
+                </label>
+                <button type="submit">Edit Product</button>
+            </form>
+        </section>
+    </div>
+    <div class="content_center">
+        <!-- Search by ID -->
+        <section class="func-section">
+            <h2>Search Product</h2>
+            <div class="search">
+                <img src="./icons/search-list-01-stroke-rounded.svg" class="search-icon">
+                <input type="text" id="search-id" placeholder="Product ID">
+            </div>
+            <button onclick="searchProduct()">Search</button>
+        </section>
 
-<!-- Edit Product Form -->
-<section>
-    <h2>Edit Product</h2>
-    <form id="edit-product-form">
-        <input type="text" id="edit-id" placeholder="Product ID" required>
-        <input type="text" id="edit-name" placeholder="New Name">
-        <input type="text" id="edit-category" placeholder="New Category">
-        <input type="text" id="edit-description" placeholder="New Description">
-        <input type="number" id="edit-price" placeholder="New Price">
-        <input type="text" id="edit-seller" placeholder="New Seller">
-        <input type="number" id="edit-quantity" placeholder="New Quantity">
-        <button type="submit">Edit Product</button>
-    </form>
-</section>
+        <!-- Add Product Form -->
+        <section class="func-section">
+            <h2>Add Product</h2>
+            <form id="add-product-form">
+                <input type="text" id="name" placeholder="Name" required>
+                <input type="text" id="category" placeholder="Category" required>
+                <input type="text" id="description" placeholder="Description" required>
+                <input type="number" id="price" placeholder="Price" required>
+                <input type="text" id="seller" placeholder="Seller" required>
+                <input type="number" id="quantity" placeholder="Quantity" required>
+                <button type="submit">Add Product</button>
+            </form>
+        </section>
 
-<!-- Search by ID -->
-<section>
-    <h2>Search Product</h2>
-    <input type="text" id="search-id" placeholder="Product ID">
-    <button onclick="searchProduct()">Search</button>
-</section>
+        <!-- Filter by Price -->
+        <section class="func-section">
+            <h2>Filter by Price</h2>
+            <input type="number" id="min-price" placeholder="Min Price">
+            <input type="number" id="max-price" placeholder="Max Price">
+            <button onclick="filterProducts()">Filter</button>
+        </section>
 
-<!-- Filter by Price -->
-<section>
-    <h2>Filter by Price</h2>
-    <input type="number" id="min-price" placeholder="Min Price">
-    <input type="number" id="max-price" placeholder="Max Price">
-    <button onclick="filterProducts()">Filter</button>
-</section>
-
-<!-- Product List -->
-<div id="product-list"></div>
+        <!-- Product List -->
+        <div id="product-list"></div>
 
 
+        <div>
+            <button id="os-info-btn">Get OS Info</button>
+            <button id="file-info-btn">Get File Info</button>
+            <div id="info-display"></div>
+        </div>
 
-<div>
-    <button id="os-info-btn">Get OS Info</button>
-    <button id="file-info-btn">Get File Info</button>
-    <div id="info-display"></div>
-</div>
+        <div>
+            <button id="sort-by-category-btn">Sort by Category</button>
+            <button id="sort-by-seller-btn">Sort by Seller</button>
+        </div>
+    </div>
+    <div class="content_side__right">
 
-<div>
-    <button id="sort-by-category-btn">Sort by Category</button>
-    <button id="sort-by-seller-btn">Sort by Seller</button>
-</div>
+    </div>
 
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="script.js"></script>
+</main>
+
+
+<!--<script src="/socket.io/socket.io.js"></script>
+<script src="script.js"></script>-->
+<script>
+    const toggleFormButton = document.getElementById('toggle-form');
+    const form = document.getElementById('edit-product-form');
+
+    // Добавляем обработчик клика
+    toggleFormButton.addEventListener('click', () => {
+        form.classList.toggle('visible');
+    });
+</script>
 </body>
 </html>

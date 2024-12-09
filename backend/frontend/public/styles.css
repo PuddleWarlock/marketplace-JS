@@ -1,25 +1,45 @@
-body {
-    font-family: Arial, sans-serif;
+* {
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #f4f4f9;
+    font-family: Arial, sans-serif;
+
 }
 
-div{
-    border: 1px solid blue;
+header{
+    display: flex;
+    justify-content: center;
 }
 
 h1 {
     margin-top: 20px;
+    margin-bottom: 20px;
     color: #333;
+}
+
+
+.content {
+    display: flex;
+    background-color: #f1f1f1;
+
+}
+
+.content_side__left {
+    width: 280px;
+}
+
+.content_center {
+    flex-direction: column;
+    width: 1300px;
+    /margin: auto;
+}
+
+.content_side__right {
 }
 
 #product-list {
     display: flex;
     flex-wrap: wrap;
+    max-width: 900px;
     gap: 20px;
     padding: 20px;
 }
@@ -32,10 +52,12 @@ h1 {
     background: #fff;
     text-align: center;
     padding: 10px;
+    transition-duration: .5s;
 }
 
 .card:hover{
     transform: scale(1.05);
+    transition-duration: .5s;
 }
 
 .card:active{
@@ -53,8 +75,9 @@ button{
     border: none;
     background-color: lightgray;
     border-radius: 5px;
-    min-width: 65px;
+    /min-width: 65px;
     min-height: 25px;
+    padding: 0 5px;
 }
 
 button:hover{
@@ -68,3 +91,82 @@ button:active{
     width: 60px;
     height: 35px;
 }
+
+div, main, section, header{
+    border: 1px red dashed;
+}
+
+
+
+.func-section {
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+input{
+    border: none;
+    min-height: 40px;
+    background-color: #e3e3e3;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+
+.hidden-form input{
+    margin-top: 5px;
+}
+
+label{
+    display: inline;
+}
+
+.search-icon {
+    width: 40px;
+    height: 40px;
+    margin: 0 20px 0 10px;
+}
+
+.search {
+    display: flex;
+}
+/* Скрываем форму по умолчанию */
+
+/* Курсор указателя при наведении на заголовок */
+h2 {
+    cursor: pointer;
+    padding: 20px 0;
+}
+
+.hidden-form {
+    /*display: none;*/
+    /*margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 5px;*/
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /align-items: center;
+    margin: 5px 5px;
+}
+
+#toggle-form:hover{
+    background-color: lightgray;
+}
+
+/* Анимация плавного появления */
+.visible {
+    max-height: 600px;
+    transition: max-height 0.3s ease;
+}
+
