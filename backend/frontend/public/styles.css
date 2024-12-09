@@ -49,10 +49,6 @@ h1 {
 }
 
 .card {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    justify-items: center;
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
@@ -61,6 +57,17 @@ h1 {
     text-align: center;
     padding: 10px;
     transition-duration: .5s;
+    height: auto;
+    min-height: 240px;
+}
+
+.card_content{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: start;
+    word-break: break-word;
+    height: 85%;
 }
 
 .card:hover{
@@ -272,4 +279,22 @@ h2 {
 
 .search_header {
     padding-left: 20px;
+}
+
+.button__delete{
+    width: 95%;
+    margin-top: 5px;
+}
+
+.button__delete:hover{
+    background-color: #ff3838;
+}
+
+.trash-icon{
+    transition-duration: .3s;
+}
+
+.button__delete:hover .trash-icon{
+    background-color: #ff3838;
+    transition-duration: .3s;
 }

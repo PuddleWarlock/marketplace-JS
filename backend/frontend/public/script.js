@@ -24,13 +24,17 @@ const renderProducts = (products) => {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
-            <h3>${product.name}</h3>
-            <p>Category: ${product.category}</p>
-            <p>Price: $${product.price}</p>
-            <p>Seller: ${product.seller}</p>
-            <p>Stock: ${product.quantity}</p>
-            <p>Description: ${product.description}</p>
-            <button onclick="deleteProduct('${product._id}')">Delete</button>
+            <div class="card_content">
+                <h3>${product.name}</h3>
+                <p>Category: ${product.category}</p>
+                <p>Price: $${product.price}</p>
+                <p>Seller: ${product.seller}</p>
+                <p>Stock: ${product.quantity}</p>
+                <p>Description: ${product.description}</p>
+           </div>
+            <button class="button__delete" onclick="deleteProduct('${product._id}')">
+            <img class="trash-icon" src="icons/trash-2.svg">
+            </button>
         `;
 
         // Add click event to populate the edit form
