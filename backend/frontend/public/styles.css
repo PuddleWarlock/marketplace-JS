@@ -42,7 +42,7 @@ h1 {
 #product-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    /*justify-content: space-evenly;*/
     max-width: 1000px;
     gap: 20px;
     padding: 20px;
@@ -296,5 +296,43 @@ h2 {
 
 .button__delete:hover .trash-icon{
     background-color: #ff3838;
+    transition-duration: .3s;
+}
+
+.response {
+    text-align: left;
+    font-size: 20px;
+    width: 400px;
+    height: 40px;
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+}
+
+.refresh-icon {
+    transition-duration: .3s;
+    width: 40px;
+    height: 40px;
+}
+
+.button__refresh {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+}
+
+.button__refresh:hover {
+    background-color: #41ef41;
+    transition-duration: .3s;
+}
+
+.button__refresh:hover .refresh-icon {
+    transform: rotate(-180deg);
+    background-color: #41ef41;
     transition-duration: .3s;
 }

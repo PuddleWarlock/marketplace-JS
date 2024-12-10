@@ -18,7 +18,7 @@ const getProductById = async (req, res) => {
         }
         res.status(200).json(product);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching product by Id' });
+        res.status(400).json({ error: 'Error fetching product by Id' });
     }
 };
 

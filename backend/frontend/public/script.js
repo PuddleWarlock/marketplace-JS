@@ -64,10 +64,13 @@ const deleteProduct = async (id) => {
 
         if (response.ok) {
             fetchProducts();
+            updateResponse(response);
         } else {
+            updateResponse(response);
             console.error('Error deleting product:', await response.text());
         }
     } catch (error) {
+        updateResponse(error);
         console.error('Error:', error);
     }
 };
@@ -96,10 +99,13 @@ document.getElementById('add-product-form').addEventListener('submit', async (e)
 
         if (response.ok) {
             fetchProducts();
+            updateResponse(response);
         } else {
+            updateResponse(response);
             console.error('Error adding product:', await response.text());
         }
     } catch (error) {
+        updateResponse(error);
         console.error('Error:', error);
     }
 });
@@ -134,10 +140,13 @@ document.getElementById('edit-product-form').addEventListener('submit', async (e
 
         if (response.ok) {
             fetchProducts();
+            updateResponse(response);
         } else {
+            updateResponse(response);
             console.error('Error editing product:', await response.text());
         }
     } catch (error) {
+        updateResponse(error);
         console.error('Error:', error);
     }
 });
@@ -150,8 +159,11 @@ const searchProduct = async () => {
         const response = await fetch(`${API_URL}/${id}`);
         const product = await response.json();
 
+        updateResponse(response);
+
         renderProducts([product]); // Display only the found product
     } catch (error) {
+        updateResponse(error);
         console.error('Error searching product:', error);
     }
 };
@@ -183,8 +195,11 @@ const fetchOSInfo = async () => {
         const response = await fetch(`${API_URL}/os`);
         const osInfo = await response.json();
 
+        updateResponse(response);
+
         displayInfo('OS Information', osInfo);
     } catch (error) {
+        updateResponse(error);
         console.error('Error fetching OS info:', error);
     }
 };
@@ -196,8 +211,11 @@ const fetchFileInfo = async () => {
         const response = await fetch(`${API_URL}/file`);
         const fileInfo = await response.text();
 
+        updateResponse(response);
+
         displayInfo('File Information', fileInfo);
     } catch (error) {
+        updateResponse(error);
         console.error('Error fetching file info:', error);
     }
 };
@@ -215,8 +233,11 @@ const fetchSortedProducts = async (sortBy) => {
         const response = await fetch(`${API_URL}/sort?by=${sortBy}`);
         const sortedProducts = await response.json();
 
+        updateResponse(response);
+
         renderProducts(sortedProducts);
     } catch (error) {
+        updateResponse(error);
         console.error(`Error sorting products by ${sortBy}:`, error);
     }
 };
@@ -234,7 +255,10 @@ document.getElementById('sort-by-seller-btn').addEventListener('click', () => {
 document.getElementById('os-info-btn').addEventListener('click', fetchOSInfo);
 document.getElementById('file-info-btn').addEventListener('click', fetchFileInfo);
 
-
+const updateResponse = (res) => {
+    let response = document.querySelector('.response');
+    response.textContent = "Response status: " + res.statusText + " Code: " + res.status;
+};
 
 // Listen for real-time updates
 /*socket.on('update', (data) => {
