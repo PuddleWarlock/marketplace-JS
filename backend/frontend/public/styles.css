@@ -232,10 +232,10 @@ h2 {
     margin-left: 20px;
 }
 
-.info {
-    position: relative;
-    bottom: 0;
-    right: 0;
+.info_buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .sort {
@@ -335,4 +335,8 @@ h2 {
     transform: rotate(-180deg);
     background-color: #41ef41;
     transition-duration: .3s;
+}
+
+.button__info {
+    width: 100px;
 }
