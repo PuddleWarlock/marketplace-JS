@@ -1,0 +1,44 @@
+﻿<!-- backend\views\layout.ejs -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проект | <%= title %></title>
+    <link rel="stylesheet" href="/styles.css">
+    <!-- Можно добавить специфичные стили для страницы, если они нужны -->
+    <% if (locals.pageStyles) { %>
+        <link rel="stylesheet" href="/<%= pageStyles %>">
+    <% } %>
+</head>
+<body>
+
+<header>
+    <h1><%= title %></h1>
+    <%- include('partials/navigation', { user: locals.user }) %> <!-- Включаем навигацию, передаем user -->
+</header>
+
+<main class="container">
+    <!-- Здесь будет включаться контент конкретной страницы -->
+    <%- include(pageTemplate, locals) %> <!-- Включаем шаблон контента, передаем все локальные переменные (title, user, error, etc.) -->
+</main>
+
+<footer>
+    <!-- Здесь можно добавить футер, который будет на всех страницах -->
+    <p>Проект© <%= new Date().getFullYear() %></p>
+    <p class="response" id="response-status">Статус ответа: Ожидание...</p>
+    <!-- Кнопка обновления списка продуктов - видна только на главной и админке -->
+    <% if (pageTemplate === 'pages/index' || pageTemplate === 'pages/admin') { %>
+        <button class="button__refresh" onclick="if(typeof fetchProducts === 'function') fetchProducts(); else if(typeof fetchAdminProducts === 'function') fetchAdminProducts(); else alert('Функция обновления недоступна на этой странице');">
+            <img class="refresh-icon" src="/icons/refresh-ccw.svg" alt="Обновить">
+        </button>
+    <% } %>
+</footer>
+
+<script src="/script.js"></script> <!-- Подключаем общий скрипт -->
+<!-- Можно добавить специфичные скрипты для страницы -->
+<% if (locals.pageScripts) { %>
+    <script src="/<%= pageScripts %>"></script>
+<% } %>
+</body>
+</html>

@@ -1,3 +1,163 @@
+
+
+=== backend\controllers\info.js ===
+const os = require('os');
+const fs = require('fs').promises;
+const path = require('path');
+
+const getOSInfo = (req, res) => {
+    const info = {
+        platform: os.platform(),
+        release: os.release(),
+        uptime: os.uptime(),
+        arch: os.arch()
+    };
+    res.status(200).json(info);
+};
+
+const getFileInfo = async (req, res) => {
+    try {
+        const filePath = path.join(__dirname, '..', 'data.txt');
+        const data = await fs.readFile(filePath, 'utf8');
+        res.status(200).json({ data });
+    } catch (error) {
+        res.status(404).json({ error: 'Error reading file' });
+    }
+};
+
+module.exports = {
+    getOSInfo,
+    getFileInfo
+};
+
+
+=== backend\controllers\products.js ===
+const Product = require('../models/product');
+
+const getProducts = async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching products' });
+    }
+};
+
+const getProductById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const product = await Product.findById(id);
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+        res.status(200).json(product);
+    } catch (error) {
+        res.status(400).json({ error: 'Error fetching product by Id' });
+    }
+};
+
+const createProduct = async (req, res) => {
+    const { seller, name, description, price, category, quantity } = req.body;
+    try {
+        const newProduct = new Product({ seller, name, description, price, category, quantity });
+        await newProduct.save();
+        res.status(201).json(newProduct);
+    } catch (error) {
+        res.status(500).json({ error: 'Error creating product' });
+    }
+};
+
+const updateProduct = async (req, res) => {
+    const { id } = req.params;
+    const updates = req.body;
+    try {
+        const updatedProduct = await Product.findByIdAndUpdate(id, updates);
+        if (!updatedProduct) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+        res.status(200).json(updatedProduct);
+    } catch (error) {
+        res.status(500).json({ error: 'Error updating product' });
+    }
+};
+
+const deleteProduct = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const deletedProduct = await Product.findByIdAndDelete(id);
+        if (!deletedProduct) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+        res.status(200).json({ message: 'Product deleted' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error deleting product' });
+    }
+};
+
+const sortProducts = async (req, res) => {
+    const { by } = req.query;
+
+    if (!['category', 'seller'].includes(by)) {
+        return res.status(400).json({ error: 'Invalid sort field' });
+    }
+
+    try {
+        const sortedProducts = await Product.find().sort({ [by]: 1 }); // Сортировка по возрастанию
+        res.json(sortedProducts);
+    } catch (error) {
+        console.error('Error sorting products:', error);
+        res.status(500).json({ error: 'Error sorting products' });
+    }
+};
+
+module.exports = {
+    getProducts,
+    getProductById,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+    sortProducts
+};
+
+
+=== backend\data.txt ===
+﻿ajshdkajshdkшгркапшгыварпдшыгварпдшывгарп
+
+=== backend\frontend\client.js ===
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+const path = require('path');
+
+const app = express();
+const client = http.createServer(app);
+const io = socketIo(client);
+
+// Serve static files
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Socket.io for real-time updates
+io.on('connection', (socket) => {
+    console.log('A user connected');
+
+    // Example of emitting real-time updates
+    setInterval(() => {
+        socket.emit('update', { message: 'Data updated!' });
+    }, 1000);
+
+    socket.on('disconnect', () => {
+        console.log('A user disconnected');
+    });
+});
+
+// Start the client
+const PORT = 4000;
+client.listen(PORT, () => {
+    console.log(`Frontend server is running on http://localhost:${PORT}`);
+});
+
+
+=== backend\frontend\package-lock.json ===
 {
   "name": "frontend",
   "version": "1.0.0",
@@ -1050,3 +1210,1034 @@
     }
   }
 }
+
+
+=== backend\frontend\package.json ===
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "main": "client.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  },
+  "scripts": {
+    "start": "node client.js"
+  }
+}
+
+
+=== backend\frontend\public\icons\chevron-down.svg ===
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+
+=== backend\frontend\public\icons\pencil-edit-02-stroke-rounded.svg ===
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
+    <path d="M16.4249 4.60509L17.4149 3.6151C18.2351 2.79497 19.5648 2.79497 20.3849 3.6151C21.205 4.43524 21.205 5.76493 20.3849 6.58507L19.3949 7.57506M16.4249 4.60509L9.76558 11.2644C9.25807 11.772 8.89804 12.4078 8.72397 13.1041L8 16L10.8959 15.276C11.5922 15.102 12.228 14.7419 12.7356 14.2344L19.3949 7.57506M16.4249 4.60509L19.3949 7.57506" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+    <path d="M18.9999 13.5C18.9999 16.7875 18.9999 18.4312 18.092 19.5376C17.9258 19.7401 17.7401 19.9258 17.5375 20.092C16.4312 21 14.7874 21 11.4999 21H11C7.22876 21 5.34316 21 4.17159 19.8284C3.00003 18.6569 3 16.7712 3 13V12.5C3 9.21252 3 7.56879 3.90794 6.46244C4.07417 6.2599 4.2599 6.07417 4.46244 5.90794C5.56879 5 7.21252 5 10.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+
+=== backend\frontend\public\icons\refresh-ccw.svg ===
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-ccw"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+
+=== backend\frontend\public\icons\scan-search.svg ===
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan-search"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3"/><path d="m16 16-1.9-1.9"/></svg>
+
+=== backend\frontend\public\icons\search-list-01-stroke-rounded.svg ===
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
+    <path d="M2 10H7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M2 17H7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M2 3H19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M19.6 18.6L22 21M20.8 14.4C20.8 11.4176 18.3824 9 15.4 9C12.4176 9 10 11.4176 10 14.4C10 17.3824 12.4176 19.8 15.4 19.8C18.3824 19.8 20.8 17.3824 20.8 14.4Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+
+=== backend\frontend\public\icons\trash-2.svg ===
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+
+=== backend\frontend\public\index.html ===
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+    <h1>Product Management</h1>
+</header>
+
+<main class="content">
+    <div class="content_side__left">
+        <!-- Edit Product Form -->
+        <section class="func-section__vertical sticky">
+            <div class="toggle-form_container drop-down interactive">
+                <h2 id="toggle-form" class="toggle-form_header">Edit Product</h2>
+                <img src="./icons/chevron-down.svg" class="arrow-down-icon" alt="">
+            </div>
+            <form id="edit-product-form" class="hidden-form__vertical hidden-form ">
+                <label class="input-container">
+                    <span>ID</span>
+                <input type="text" id="edit-id" placeholder="Product ID" required>
+                </label>
+                <label class="input-container">
+                    <span>Name</span>
+                    <input type="text" id="edit-name" placeholder="New Name">
+                </label>
+                <label class="input-container">
+                    <span>Category</span>
+                    <input type="text" id="edit-category" placeholder="New Category">
+                </label>
+                <label class="input-container">
+                    <span>Description</span>
+                    <input type="text" id="edit-description" placeholder="New Description">
+                </label>
+                <label class="input-container">
+                    <span>Price</span>
+                    <input type="number" id="edit-price" placeholder="New Price">
+                </label>
+                <label class="input-container">
+                    <span>Seller</span>
+                    <input type="text" id="edit-seller" placeholder="New Seller">
+                </label>
+                <label class="input-container">
+                    <span>Quantity</span>
+                    <input type="number" id="edit-quantity" placeholder="New Quantity">
+                </label>
+                <button id = "toggle-form-button" type="submit">Edit Product</button>
+            </form>
+        </section>
+    </div>
+    <div class="content_center">
+        <!-- Search by ID -->
+        <section class="func-section__vertical search_section sticky">
+            <div class="toggle-form_container drop-down interactive">
+                <h2 class="toggle-form_header search_header">Search Product</h2>
+                <img src="./icons/chevron-down.svg" class="arrow-down-icon" alt="">
+            </div>
+            <div class="search hidden-form hidden-form__horizontal">
+                <input  type="text" id="search-id"  placeholder="Product ID">
+                <img onclick="searchProduct()" src="./icons/scan-search.svg" class="search-icon" alt="">
+            </div>
+        </section>
+
+        <!-- Product List -->
+        <div id="product-list">
+            <div class="card">
+                <div class="card_content">
+                    <h3>Product 22</h3>
+                    <p>Category: Category A</p>
+                    <p>Price: $102</p>
+                    <p>Seller: Seller 4</p>
+                    <p>Stock: 10</p>
+                    <p>Description: Description for Product </p>
+                </div>
+                <button class="button__delete" onclick="deleteProduct('6755a02e01dde351617a0e9c')">
+                    <img class="trash-icon" src="icons/trash-2.svg">
+                </button>
+            </div>
+            <div class="card">
+                <div class="card_content">
+                    <h3>Product 22</h3>
+                    <p>Category: Category A</p>
+                    <p>Price: $102</p>
+                    <p>Seller: Seller 4</p>
+                    <p>Stock: 10</p>
+                    <p>Description: Description</p>
+                </div>
+                <button class="button__delete" onclick="deleteProduct('6755a02e01dde351617a0e9c')">
+                    <img class="trash-icon" src="icons/trash-2.svg">
+                </button>
+            </div>
+            <div class="card">
+                <div class="card_content">
+                    <h3>Product 22</h3>
+                    <p>Category: Category A</p>
+                    <p>Price: $102</p>
+                    <p>Seller: Seller 4</p>
+                    <p>Stock: 10</p>
+                    <p>Description: Description for Product 4</p>
+                </div>
+                <button class="button__delete" onclick="deleteProduct('6755a02e01dde351617a0e9c')">
+                    <img class="trash-icon" src="icons/trash-2.svg">
+                </button>
+            </div>
+            <div class="card">
+                <div class="card_content">
+                    <h3>Product 22</h3>
+                    <p>Category: Category A</p>
+                    <p>Price: $102</p>
+                    <p>Seller: Seller 4</p>
+                    <p>Stock: 10</p>
+                    <p>Description: Description for Product 4</p>
+                </div>
+                <button class="button__delete" onclick="deleteProduct('6755a02e01dde351617a0e9c')">
+                    <img class="trash-icon" src="icons/trash-2.svg">
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <div class="info_buttons">
+                <button id="os-info-btn" class="button__info">Get OS Info</button>
+                <button id="file-info-btn" class="button__info">Get File Info</button>
+            </div>
+            <div id="info-display"></div>
+        </div>
+
+    </div>
+    <div class="content_side__right ">
+        <!-- Add Product Form -->
+        <div class="sticky">
+            <section class="func-section__vertical ">
+                <div class="toggle-form_container drop-down interactive">
+                    <h2 id="toggle-add-form" class="toggle-form_header ">Add Product</h2>
+                    <img src="./icons/chevron-down.svg" class="arrow-down-icon" alt="">
+                </div>
+                <form id="add-product-form" class="hidden-form__vertical hidden-form">
+                    <label class="input-container">
+                        <span>Name</span>
+                        <input type="text" id="name" placeholder="Name" required>
+                    </label>
+                    <label class="input-container">
+                        <span>Category</span>
+                        <input type="text" id="category" placeholder="Category" required>
+                    </label>
+                    <label class="input-container">
+                        <span>Description</span>
+                        <input type="text" id="description" placeholder="Description" required>
+                    </label>
+                    <label class="input-container">
+                        <span>Price</span>
+                        <input type="number" id="price" placeholder="Price" required>
+                    </label>
+                    <label class="input-container">
+                        <span>Seller</span>
+                        <input type="text" id="seller" placeholder="Seller" required>
+                    </label>
+                    <label class="input-container">
+                        <span>Quantity</span>
+                        <input type="number" id="quantity" placeholder="Quantity" required>
+                    </label>
+                    <button type="submit">Add Product</button>
+                </form>
+            </section>
+            <!-- Filter by Price -->
+            <section class="func-section__vertical ">
+                <div class="toggle-form_container drop-down interactive">
+                    <h2 class="toggle-form_header">Filter by Price</h2>
+                    <img src="./icons/chevron-down.svg" class="arrow-down-icon" alt="">
+                </div>
+
+                <div class="hidden-form__vertical hidden-form filter">
+                    <input type="number" id="min-price" placeholder="Min Price">
+                    <input type="number" id="max-price" placeholder="Max Price">
+                    <button onclick="filterProducts()">Filter</button>
+                </div>
+            </section>
+            <div class="sort">
+                <button id="sort-by-category-btn">Sort by Category</button>
+                <button id="sort-by-seller-btn">Sort by Seller</button>
+            </div>
+        </div>
+
+    </div>
+
+
+</main>
+<footer>
+    <p class="response">Response status: </p>
+    <button class="button__refresh" onclick="fetchProducts()">
+        <img class="refresh-icon" src="icons/refresh-ccw.svg" alt="refresh products">
+    </button>
+</footer>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="script.js"></script>
+<script>
+
+
+
+
+
+    let toggleFormButtons = document.querySelectorAll('.toggle-form_container');
+    let forms = document.querySelectorAll('.hidden-form');
+
+    // Добавляем обработчик клика
+    toggleFormButtons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+            forms[index].classList.toggle('visible');
+        });
+    });
+</script>
+</body>
+</html>
+
+
+=== backend\frontend\public\script.js ===
+const socket = io();
+
+// Backend API URL
+const API_URL = 'http://localhost:3000/api/products';
+
+// Fetch and display products
+const fetchProducts = async () => {
+    try {
+        const response = await fetch(API_URL);
+        const products = await response.json();
+
+        renderProducts(products);
+    } catch (error) {
+        console.error('Error fetching products:', error);
+    }
+};
+
+// Render products as cards
+const renderProducts = (products) => {
+    const productList = document.getElementById('product-list');
+    productList.innerHTML = '';
+
+    products.forEach((product) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <div class="card_content">
+                <h3>${product.name||'No such product'}</h3>
+                <p>Category: ${product.category||''}</p>
+                <p>Price: $${product.price||''}</p>
+                <p>Seller: ${product.seller||''}</p>
+                <p>Stock: ${product.quantity||''}</p>
+                <p>Description: ${product.description||''}</p>
+           </div>
+            <button class="button__delete" onclick="deleteProduct('${product._id}')">
+            <img class="trash-icon" src="icons/trash-2.svg">
+            </button>
+        `;
+
+        // Add click event to populate the edit form
+        card.onclick = () => populateEditForm(product);
+
+        productList.appendChild(card);
+    });
+};
+
+// Populate the edit form with product data.txt
+const populateEditForm = (product) => {
+    document.getElementById('edit-id').value = product._id;
+    document.getElementById('edit-name').value = product.name;
+    document.getElementById('edit-category').value = product.category;
+    document.getElementById('edit-description').value = product.description;
+    document.getElementById('edit-price').value = product.price;
+    document.getElementById('edit-seller').value = product.seller;
+    document.getElementById('edit-quantity').value = product.quantity;
+};
+
+// Delete a product
+const deleteProduct = async (id) => {
+    try {
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: 'DELETE',
+        });
+
+        if (response.ok) {
+            fetchProducts();
+            updateResponse(response);
+        } else {
+            updateResponse(response);
+            console.error('Error deleting product:', await response.text());
+        }
+    } catch (error) {
+        updateResponse(error);
+        console.error('Error:', error);
+    }
+};
+
+// Add a new product
+document.getElementById('add-product-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const product = {
+        name: document.getElementById('name').value,
+        category: document.getElementById('category').value,
+        description: document.getElementById('description').value,
+        price: Number(document.getElementById('price').value),
+        seller: document.getElementById('seller').value,
+        quantity: Number(document.getElementById('quantity').value),
+    };
+
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(product),
+        });
+
+        if (response.ok) {
+            fetchProducts();
+            updateResponse(response);
+        } else {
+            updateResponse(response);
+            console.error('Error adding product:', await response.text());
+        }
+    } catch (error) {
+        updateResponse(error);
+        console.error('Error:', error);
+    }
+});
+
+// Edit an existing product
+document.getElementById('edit-product-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const id = document.getElementById('edit-id').value;
+    const updatedProduct = {
+        name: document.getElementById('edit-name').value || undefined,
+        category: document.getElementById('edit-category').value || undefined,
+        description: document.getElementById('edit-description').value || undefined,
+        price: document.getElementById('edit-price').value
+            ? Number(document.getElementById('edit-price').value)
+            : undefined,
+        seller: document.getElementById('edit-seller').value || undefined,
+        updatedAt: new Date(),
+        quantity: document.getElementById('edit-quantity').value
+            ? Number(document.getElementById('edit-quantity').value)
+            : undefined,
+    };
+
+    try {
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedProduct),
+        });
+
+        if (response.ok) {
+            fetchProducts();
+            updateResponse(response);
+        } else {
+            updateResponse(response);
+            console.error('Error editing product:', await response.text());
+        }
+    } catch (error) {
+        updateResponse(error);
+        console.error('Error:', error);
+    }
+});
+
+// Search for a product by ID
+const searchProduct = async () => {
+    const id = document.getElementById('search-id').value;
+
+    try {
+        const response = await fetch(`${API_URL}/${id}`);
+        const product = await response.json();
+
+        updateResponse(response);
+
+        renderProducts([product]); // Display only the found product
+    } catch (error) {
+        updateResponse(error);
+        console.error('Error searching product:', error);
+    }
+};
+
+// Filter products by price range
+const filterProducts = async () => {
+    const minPrice = Number(document.getElementById('min-price').value)?Number(document.getElementById('min-price').value):0;
+    const maxPrice = Number(document.getElementById('max-price').value)?Number(document.getElementById('max-price').value):9999999;
+
+    try {
+        const response = await fetch(API_URL);
+        const products = await response.json();
+
+        const filteredProducts = products.filter(
+            (product) => product.price >= minPrice && product.price <= maxPrice
+        );
+
+        renderProducts(filteredProducts);
+    } catch (error) {
+        console.error('Error filtering products:', error);
+    }
+};
+
+
+// Fetch and display OS information
+const fetchOSInfo = async () => {
+    const API_URL = 'http://localhost:3000/api/info';
+    try {
+        const response = await fetch(`${API_URL}/os`);
+        const osInfo = await response.json();
+
+        updateResponse(response);
+
+        displayInfo('OS Information', osInfo);
+    } catch (error) {
+        updateResponse(error);
+        console.error('Error fetching OS info:', error);
+    }
+};
+
+// Fetch and display file information
+const fetchFileInfo = async () => {
+    const API_URL = 'http://localhost:3000/api/info';
+    try {
+        const response = await fetch(`${API_URL}/file`);
+        const fileInfo = await response.text();
+
+        updateResponse(response);
+
+        displayInfo('File Information', fileInfo);
+    } catch (error) {
+        updateResponse(error);
+        console.error('Error fetching file info:', error);
+    }
+};
+
+// Display fetched information
+const displayInfo = (title, info) => {
+    const infoDisplay = document.getElementById('info-display');
+    infoDisplay.innerHTML = `<h3>${title}</h3><pre>${JSON.stringify(info, null, 2)}</pre>`;
+};
+
+
+// Fetch and display sorted products
+const fetchSortedProducts = async (sortBy) => {
+    try {
+        const response = await fetch(`${API_URL}/sort?by=${sortBy}`);
+        const sortedProducts = await response.json();
+
+        updateResponse(response);
+
+        renderProducts(sortedProducts);
+    } catch (error) {
+        updateResponse(error);
+        console.error(`Error sorting products by ${sortBy}:`, error);
+    }
+};
+
+// Event listeners for sorting
+document.getElementById('sort-by-category-btn').addEventListener('click', () => {
+    fetchSortedProducts('category');
+});
+
+document.getElementById('sort-by-seller-btn').addEventListener('click', () => {
+    fetchSortedProducts('seller');
+});
+
+// Event listeners for buttons
+document.getElementById('os-info-btn').addEventListener('click', fetchOSInfo);
+document.getElementById('file-info-btn').addEventListener('click', fetchFileInfo);
+
+const updateResponse = (res) => {
+    let response = document.querySelector('.response');
+    response.textContent = "Response status: " + res.statusText + " Code: " + res.status;
+};
+
+// Listen for real-time updates
+/*socket.on('update', (data) => {
+    console.log('Real-time update:', data);
+    //fetchProducts();
+});*/
+
+// Initial load
+fetchProducts();
+
+
+=== backend\frontend\public\styles.css ===
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f1f1f1;
+}
+
+header{
+    display: flex;
+    justify-content: center;
+}
+
+h1 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: #f1f1f1;
+}
+
+
+.content {
+    display: flex;
+    justify-content: center;
+    background-color: #f1f1f1;
+    /*height: 10000px;*/
+}
+
+.content_side__left {
+    width: 280px;
+}
+
+.content_center {
+    display: flex;
+    flex-basis: 1300px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content_side__right {
+    width: 280px;
+}
+
+#product-list {
+    display: flex;
+    flex-wrap: wrap;
+    /*justify-content: space-evenly;*/
+    max-width: 1000px;
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    background: #f1f1f1;
+    text-align: center;
+    padding: 10px;
+    transition-duration: .5s;
+    height: auto;
+    min-height: 240px;
+}
+
+.card_content{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: start;
+    word-break: break-word;
+    height: 85%;
+}
+
+.card:hover{
+    transform: scale(1.05);
+    transition-duration: .5s;
+}
+
+.card:active{
+    transform: scale(.97);
+}
+
+button{
+    border: none;
+    flex-grow: 10;
+    /*background-color: lightgray;*/
+    box-shadow: darkgray 1px 1px 5px;
+    border-radius: 5px;
+    /*min-width: 65px*/;
+    height: 35px;
+    padding: 0 15px;
+    margin: 2px 5px;
+    transition-duration: .3s;
+}
+
+button:hover{
+    background-color: #e3e3e3;
+    transition-duration: .3s;
+}
+button:active{
+    /transform: scale(.95);
+    box-shadow: darkgray 0px 0px 1px;
+    transition-duration: .1s;
+}
+
+
+/*div, main, section, header{
+    border: 1px red dashed;
+}*/
+
+
+
+.func-section__vertical {
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+input{
+    border: darkgray 1px solid;
+    min-height: 40px;
+    background-color: #f1f1f1;
+    border-radius: 12px;
+    padding-left: 10px;
+}
+
+.hidden-form__vertical input{
+    margin-top: 5px;
+}
+
+label span{
+    padding-left: 10px;
+}
+
+.search-icon{
+    width: 40px;
+    height: 40px;
+    margin: 0 20px 0 10px;
+    transition-duration: .3s;
+}
+.search-icon:hover{
+    transition-duration: .3s;
+    transform: scale(1.1);
+}
+.search-icon:active{
+    transition-duration: .3s;
+    transform: scale(.97);
+}
+.search {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f1f1f1;
+}
+
+/* Курсор указателя при наведении на заголовок */
+h2 {
+    padding: 20px 0;
+    background-color: #f1f1f1;
+}
+
+.interactive{
+    cursor: pointer;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 5px 5px;
+}
+
+.toggle-form_container{
+    transition-duration: .3s;
+}
+/*.toggle-form_header:hover{
+    transition-duration: .3s;
+    background-color: lightgray;
+}*/
+
+
+/* Наведение на контейнер или любой из его детей */
+.toggle-form_container:hover {
+    background-color: lightgray; /* Пример: изменение фона */
+    cursor: pointer;
+}
+
+/* Применение стилей для вложенных элементов */
+.toggle-form_container:hover .toggle-form_header,
+.toggle-form_container:hover .arrow-down-icon {
+    background-color: lightgray;
+    transition-duration: .3s /* Анимация для плавности */
+}
+
+/*.toggle-form_container:active .arrow-down-icon {
+    rotate: 90deg;
+}*/
+
+
+.hidden-form__vertical {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease;
+}
+.hidden-form{
+
+}
+
+.hidden-form__horizontal{
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease;
+}
+
+/* Анимация плавного появления */
+.visible {
+    max-height: 600px;
+    transition: max-height 0.5s ease;
+}
+
+.sticky {
+    position: sticky;
+    top: 0;
+}
+
+#search-id {
+    flex-basis: 100%;
+    margin-left: 20px;
+}
+
+.info_buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sort {
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+.sort button{
+    margin: 0 5px;
+}
+
+.filter button{
+    margin-top: 5px;
+}
+
+#toggle-form-button{
+    margin-bottom: 5px;
+}
+
+.arrow-down-icon {
+    width: 40px;
+    height: 40px;
+    transition-duration: .3s;
+    margin-right: 20px;
+}
+
+
+.drop-down {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-form_header {
+    transition-duration: .3s;
+}
+
+.search_section {
+    width: 100%;
+}
+
+.search_header {
+    padding-left: 20px;
+}
+
+.button__delete{
+    width: 95%;
+    margin-top: 5px;
+}
+
+.button__delete:hover{
+    background-color: #ff3838;
+}
+
+.trash-icon{
+    transition-duration: .3s;
+}
+
+.button__delete:hover .trash-icon{
+    background-color: #ff3838;
+    transition-duration: .3s;
+}
+
+.response {
+    text-align: left;
+    font-size: 20px;
+    width: 400px;
+    height: 40px;
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+}
+
+.refresh-icon {
+    transition-duration: .3s;
+    width: 40px;
+    height: 40px;
+}
+
+.button__refresh {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+}
+
+.button__refresh:hover {
+    background-color: #41ef41;
+    transition-duration: .3s;
+}
+
+.button__refresh:hover .refresh-icon {
+    transform: rotate(-180deg);
+    background-color: #41ef41;
+    transition-duration: .3s;
+}
+
+.button__info {
+    width: 100px;
+}
+
+=== backend\middlewares\db.js ===
+const mongoose = require('mongoose');
+
+const connectDB = async () => {
+    try {
+        await mongoose.connect('mongodb://localhost:27017/products');
+        console.log('MongoDB connected successfully');
+    } catch (error) {
+        console.error('MongoDB connection error:', error);
+        process.exit(1);
+    }
+};
+
+module.exports = connectDB;
+
+
+=== backend\models\product.js ===
+const mongoose = require('mongoose');
+
+const productSchema = new mongoose.Schema({
+    seller: { type: String, required: true },
+    name: { type: String, required: true },
+    description: String,
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
+    price: { type: Number, required: true },
+    category: String,
+    quantity: Number
+});
+
+module.exports = mongoose.model('Product', productSchema);
+
+
+=== backend\routes\index.js ===
+const express = require('express');
+const productRoutes = require('./products');
+const infoRoutes = require('./info');
+
+const router = express.Router();
+
+router.use('/products', productRoutes);
+router.use('/info', infoRoutes);
+
+module.exports = router;
+
+
+=== backend\routes\info.js ===
+const express = require('express');
+const { getOSInfo, getFileInfo } = require('../controllers/info');
+
+const router = express.Router();
+
+router.get('/os', getOSInfo);
+router.get('/file', getFileInfo);
+
+module.exports = router;
+
+
+=== backend\routes\products.js ===
+const express = require('express');
+const { getProducts, getProductById, createProduct, updateProduct, deleteProduct, sortProducts} = require('../controllers/products');
+
+const router = express.Router();
+
+router.get('/sort', sortProducts)
+router.get('/', getProducts);
+router.get('/:id', getProductById);
+router.post('/', createProduct);
+router.put('/:id', updateProduct);
+router.delete('/:id', deleteProduct);
+
+module.exports = router;
+
+
+=== backend\server.js ===
+const express = require('express');
+const routes = require('./routes');
+const connectDB = require('./middlewares/db');
+const { logRequest,logError } = require('./utils/logger');
+const cors = require('cors');
+
+
+const server = express();
+
+// Connect to MongoDB
+connectDB();
+
+// Middlewares
+server.use(express.json());
+server.use(logRequest);
+server.use(cors({
+    origin: 'http://localhost:4000', // Разрешаем запросы с этого домена
+    methods: ['GET', 'POST','PUT','DELETE'],
+}));
+
+// Routes
+server.use('/api', routes);
+
+// Start server
+const PORT = 3000;
+server.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+
+=== backend\utils\logger.js ===
+const fs = require('fs');
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
+
+const logFilePath = path.join(__dirname, '..', 'logs', 'requests.log');
+
+// Middleware для логирования запросов
+const logRequest = (req, res, next) => {
+    const requestId = uuidv4();
+    req.requestId = requestId;
+
+    const startTime = Date.now();
+    res.on('finish', () => {
+        const duration = Date.now() - startTime;
+        const logEntry = `${new Date().toISOString()} | ID: ${requestId} | Method: ${req.method} | URL: ${req.originalUrl} | Status: ${res.statusCode} | Duration: ${duration}ms\n`;
+
+        fs.appendFile(logFilePath, logEntry, (err) => {
+            if (err) {
+                console.error('Error writing log:', err);
+            }
+        });
+    });
+
+    res.on('error', (error) => {
+        logError(req, error);
+    });
+
+    next();
+};
+
+// Логирование ошибок
+const logError = (req, error) => {
+    const errorEntry = `${new Date().toISOString()} | ID: ${req.requestId || 'N/A'} | Method: ${req.method} | URL: ${req.originalUrl} | Error: ${error.message} | Stack: ${error.stack}\n`;
+
+    fs.appendFile(logFilePath, errorEntry, (err) => {
+        if (err) {
+            console.error('Error writing error log:', err);
+        }
+    });
+};
+
+module.exports = { logRequest, logError };

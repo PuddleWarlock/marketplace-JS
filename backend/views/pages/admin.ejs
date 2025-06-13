@@ -1,0 +1,107 @@
+﻿<!-- backend\views\admin.ejs -->
+
+
+<!-- Содержимое страницы администратора -->
+<div class="content">
+    <div class="content_side__left">
+        <!-- Здесь может быть дополнительный контент -->
+    </div>
+    <div class="content_center">
+        <h2>Панель администратора</h2>
+        <p>Здесь вы можете управлять продуктами.</p>
+
+        <!-- Add Product Form (перенесено из index.html) -->
+        <section class="func-section__vertical">
+            <div class="toggle-form_container drop-down interactive">
+                <h2 class="toggle-form_header">Добавить продукт</h2>
+                <img src="/icons/chevron-down.svg" class="arrow-down-icon" alt="">
+            </div>
+            <form id="add-product-form" class="hidden-form__vertical hidden-form">
+                <label class="input-container">
+                    <span>Название</span>
+                    <input type="text" id="name" placeholder="Название" required>
+                </label>
+                <label class="input-container">
+                    <span>Категория</span>
+                    <input type="text" id="category" placeholder="Категория" required>
+                </label>
+                <label class="input-container">
+                    <span>Описание</span>
+                    <input type="text" id="description" placeholder="Описание" required>
+                </label>
+                <label class="input-container">
+                    <span>Цена</span>
+                    <input type="number" id="price" placeholder="Цена" required>
+                </label>
+                <label class="input-container">
+                    <span>Продавец</span>
+                    <input type="text" id="seller" placeholder="Продавец" required>
+                </label>
+                <label class="input-container">
+                    <span>Количество</span>
+                    <input type="number" id="quantity" placeholder="Количество" required>
+                </label>
+                <button type="submit">Добавить продукт</button>
+                <div id="add-form-errors" class="errors-display"></div> <!-- Для вывода ошибок валидации -->
+            </form>
+        </section>
+
+        <!-- Edit Product Form (перенесено из index.html) -->
+        <section class="func-section__vertical">
+            <div class="toggle-form_container drop-down interactive">
+                <h2 class="toggle-form_header">Редактировать продукт</h2>
+                <img src="/icons/chevron-down.svg" class="arrow-down-icon" alt="">
+            </div>
+            <form id="edit-product-form" class="hidden-form__vertical hidden-form">
+                <label class="input-container">
+                    <span>ID</span>
+                    <input type="text" id="edit-id" placeholder="ID продукта" required readonly> <!-- ID только для чтения -->
+                </label>
+                <label class="input-container">
+                    <span>Название</span>
+                    <input type="text" id="edit-name" placeholder="Новое название">
+                </label>
+                <label class="input-container">
+                    <span>Категория</span>
+                    <input type="text" id="edit-category" placeholder="Новая категория">
+                </label>
+                <label class="input-container">
+                    <span>Описание</span>
+                    <input type="text" id="edit-description" placeholder="Новое описание">
+                </label>
+                <label class="input-container">
+                    <span>Цена</span>
+                    <input type="number" id="edit-price" placeholder="Новая цена">
+                </label>
+                <label class="input-container">
+                    <span>Продавец</span>
+                    <input type="text" id="edit-seller" placeholder="Новый продавец">
+                </label>
+                <label class="input-container">
+                    <span>Количество</span>
+                    <input type="number" id="edit-quantity" placeholder="Новое количество">
+                </label>
+                <button id="toggle-form-button" type="submit">Сохранить изменения</button>
+                <div id="edit-form-errors" class="errors-display"></div> <!-- Для вывода ошибок валидации -->
+            </form>
+        </section>
+
+        <!-- Delete Functionality (будет в script.js, но нужен список продуктов для выбора) -->
+        <h2>Продукты для выбора (для редактирования/удаления)</h2>
+        <p>Кликните по карточке продукта, чтобы заполнить форму редактирования.</p>
+        <div id="admin-product-list" class="product-grid"> <!-- Отдельный div для списка продуктов в админке -->
+            <!-- Продукты будут добавлены сюда скриптом -->
+            <p>Загрузка продуктов...</p>
+        </div>
+
+    </div>
+    <div class="content_side__right">
+        <!-- Здесь может быть дополнительный контент -->
+    </div>
+</div>
+
+<script>
+    // Этот скрипт может быть в script.js или отдельным файлом для админки
+    // Если он в script.js, убедитесь, что он запускается только на странице админки
+    // или что он корректно обрабатывает отсутствие элементов #add-product-form и #edit-product-form
+</script>

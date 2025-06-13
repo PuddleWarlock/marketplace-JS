@@ -340,3 +340,179 @@ h2 {
 .button__info {
     width: 100px;
 }
+
+
+/* backend\public\styles.css */
+/* ... существующие стили ... */
+
+.errors-display {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid red;
+    background-color: #ffecec; /* Светло-красный фон */
+    color: #d9534f; /* Темно-красный текст */
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+.errors-display ul {
+    list-style: inside; /* Маркеры внутри блока */
+    padding-left: 0; /* Убираем стандартный отступ списка */
+}
+.errors-display li {
+    margin-bottom: 5px;
+}
+
+
+.success-display {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid green;
+    background-color: #dff0d8; /* Светло-зеленый фон */
+    color: #3c763d; /* Темно-зеленый текст */
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* Стили для страницы авторизации */
+.auth-forms-container {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff; /* Белый фон для форм */
+    max-width: 400px; /* Ограничиваем ширину */
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.auth-forms-container h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    background-color: inherit; /* Наследуем фон контейнера */
+}
+
+.auth-forms-container form label span {
+    background-color: inherit;
+}
+
+.auth-forms-container input {
+    background-color: #fff; /* Белый фон для полей */
+}
+
+.auth-forms-container button {
+    width: 100%; /* Кнопка на всю ширину формы */
+    margin-top: 10px;
+}
+
+/* Стили для контейнера main, чтобы контент был по центру и с отступами */
+.container {
+    padding: 20px;
+}
+
+/* Адаптация для секций на главной и админке */
+.func-section__vertical {
+    margin-bottom: 20px; /* Отступ между секциями */
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.func-section__vertical h2 {
+    background-color: inherit;
+}
+
+.func-section__vertical .input-container span {
+    background-color: inherit;
+}
+
+.func-section__vertical input,
+.func-section__vertical textarea {
+    background-color: #f9f9f9; /* Более светлый фон для полей в секциях */
+}
+
+/* Убираем фон у иконок, если он наследуется от контейнера */
+.search-icon, .arrow-down-icon, .trash-icon, .refresh-icon {
+    background-color: transparent;
+}
+
+/* Стили для списка продуктов в админке, если нужен другой макет */
+.product-grid { /* Переименовал id в класс для переиспользования */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px 0; /* Убираем боковые отступы, если контейнер уже с отступами */
+    justify-content: center; /* Центрируем карточки */
+}
+
+/* Убираем стандартный отступ у ul в навигации */
+nav ul {
+    padding: 0;
+    list-style: none;
+    display: flex; /* Выстраиваем пункты в ряд */
+    justify-content: center; /* Центрируем пункты */
+    gap: 20px; /* Расстояние между пунктами */
+    margin-top: 10px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+header {
+    background-color: #e9e9e9;
+    padding: 10px 0;
+    text-align: center;
+    margin-bottom: 20px; /* Отступ между шапкой и контентом */
+}
+header h1 {
+    background-color: inherit;
+}
+
+footer {
+    background-color: #e9e9e9;
+    padding: 15px;
+    text-align: center;
+    margin-top: 30px; /* Отступ между контентом и футером */
+    position: relative; /* Для позиционирования абсолютных элементов внутри */
+    min-height: 80px; /* Чтобы было место для статуса и кнопки */
+}
+
+footer p {
+    background-color: inherit;
+}
+
+/* Перемещаем статус и кнопку в футер с абсолютным позиционированием */
+.response {
+    position: absolute;
+    left: 20px;
+    bottom: 15px;
+    width: auto; /* Ширина по содержимому */
+    font-size: 0.9em;
+}
+
+.button__refresh {
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+    width: 40px; /* Меньший размер кнопки в футере */
+    height: 40px;
+    margin: 0; /* Убираем margin */
+    padding: 0; /* Убираем padding */
+}
+.button__refresh img {
+    background-color: transparent; /* Убираем фон у иконки */
+    width: 24px; /* Меньший размер иконки */
+    height: 24px;
+}
+.button__refresh:hover .refresh-icon {
+    background-color: transparent; /* Убираем фон у иконки при ховере */
+}
