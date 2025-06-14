@@ -2,15 +2,19 @@
 const ContactMessage = require('../models/contact');
 const { validationResult } = require('express-validator');
 
-const sendContactMessage = async (req, res) => {
-    // Проверяем результаты валидации
+// Вспомогательная функция для обработки ошибок валидации (уже есть в auth, но лучше иметь локально или в общем файле)
+// Если решите сделать handleValidationErrors общим, удалите его из auth.js и contact.js и импортируйте.
+const handleValidationErrors = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        // Если есть ошибки валидации, отправляем их в JSON формате
-        // В случае формы на странице, JS на клиенте должен будет их обработать и показать пользователю
         return res.status(400).json({ errors: errors.array() });
     }
+    next();
+};
 
+
+const sendContactMessage = async (req, res, next) => {
+    // Валидация уже выполнена
     const { name, email, message } = req.body;
 
     try {
@@ -18,16 +22,28 @@ const sendContactMessage = async (req, res) => {
         const newMessage = new ContactMessage({ name, email, message });
         await newMessage.save();
 
-        // Отправляем успешный ответ
-        // В случае формы на странице, JS на клиенте должен будет показать это сообщение
+        // 201 Created - успешное создание ресурса
         res.status(201).json({ message: 'Ваше сообщение успешно отправлено!' });
 
     } catch (error) {
-        console.error('Ошибка при отправке сообщения:', error);
-        res.status(500).json({ error: 'Ошибка сервера при отправке сообщения' });
+        next(error); // Передаем ошибку дальше, включая ошибки валидации Mongoose
     }
 };
 
+const getContactMessages = async (req, res, next) => {
+    try {
+        // Находим все сообщения обратной связи
+        const messages = await ContactMessage.find({}).sort({ createdAt: -1 }); // Сортируем по дате создания (новые сверху)
+        // 200 OK - успешный запрос
+        res.status(200).json(messages);
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 module.exports = {
-    sendContactMessage
+    sendContactMessage,
+    getContactMessages, // Экспортируем новую функцию
+    handleValidationErrors // Экспортируем для использования в маршрутах contact
 };

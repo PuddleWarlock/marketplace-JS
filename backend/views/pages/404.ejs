@@ -1,10 +1,57 @@
-﻿<!-- backend\views\404.ejs -->
-
+﻿﻿<!-- backend\views\pages\404.ejs -->
 <!-- Содержимое страницы 404 -->
-<div class="content">
-    <div class="content_center" style="text-align: center;">
+
+<% /* Этот шаблон включится внутрь <div class="content not-found-page-layout"> в layout.ejs */ %>
+
+<div class="content_center">
+    <!-- Блок 1: Основное сообщение -->
+    <section class="func-section__vertical">
         <h2>404 - Страница не найдена</h2>
-        <p>Извините, страница, которую вы ищете, не существует.</p>
-        <p><a href="/">Перейти на главную страницу</a></p>
-    </div>
+        <p>Извините, страница, которую вы ищете, не существует или была перемещена.</p>
+        <img src="/images/404.jpg" alt="Страница не найдена" class="info-image">
+    </section>
+
+    <!-- Блок 2: Ссылка на главную -->
+    <section class="func-section__vertical">
+        <p>Пожалуйста, перейдите на <a href="/">главную страницу</a>.</p>
+    </section>
+
+
+    <!-- Блок 3: Поиск -->
+    <section class="func-section__vertical">
+        <h3>Поиск по сайту</h3>
+        <p>Попробуйте найти нужную информацию с помощью поиска:</p>
+        <div class="search-input-container">
+            <input type="text" placeholder="Что ищете?">
+            <button>Найти</button>
+        </div>
+    </section>
+
+    <!-- Блок 4: Популярные страницы -->
+    <section class="func-section__vertical">
+        <h3>Популярные разделы</h3>
+        <p>Возможно, вы ищете один из этих разделов:</p>
+        <ul>
+            <li><a href="/">Главная</a></li>
+            <li><a href="/admin">Панель администратора</a></li>
+            <li><a href="/contact">Обратная связь</a></li>
+            <li><a href="/auth">Вход / Регистрация</a></li>
+            <!-- Добавьте другие важные ссылки, если есть -->
+        </ul>
+    </section>
+
+    <!-- Блок 5: Контакты -->
+    <section class="func-section__vertical">
+        <h3>Нужна помощь?</h3>
+        <p>Если вы уверены, что страница должна существовать, пожалуйста, <a href="/contact">свяжитесь с нами</a>.</p>
+        <p>Мы постараемся помочь!</p>
+    </section>
+
+    <!-- Блок 6: Дополнительная информация (пример) -->
+    <section class="func-section__vertical">
+        <h3>Совет</h3>
+        <p>Проверьте правильность написания адреса страницы.</p>
+    </section>
+
 </div>
+<% /* Боковые колонки скрыты через CSS в layout.ejs */ %>

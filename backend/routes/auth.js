@@ -1,7 +1,8 @@
 ﻿// backend\routes\auth.js
 const express = require('express');
-const { register, login, logout } = require('../controllers/auth');
-const { body } = require('express-validator'); // Для валидации
+const { register, login, getUsers, handleValidationErrors } = require('../controllers/auth'); // Импортируем handleValidationErrors и getUsers
+const authMiddleware = require('../middlewares/auth'); // Импортируем authMiddleware
+const { body } = require('express-validator');
 
 const router = express.Router();
 
@@ -9,15 +10,18 @@ const router = express.Router();
 router.post('/register', [
     body('username').trim().notEmpty().withMessage('Имя пользователя обязательно'),
     body('password').isLength({ min: 6 }).withMessage('Пароль должен быть минимум 6 символов')
-], register);
+], handleValidationErrors, register); // Применяем handleValidationErrors
 
 // Маршрут для входа пользователя
 router.post('/login', [
     body('username').trim().notEmpty().withMessage('Имя пользователя обязательно'),
     body('password').notEmpty().withMessage('Пароль обязателен')
-], login);
+], handleValidationErrors, login); // Применяем handleValidationErrors
 
-// Маршрут для выхода пользователя (опционально, можно использовать GET /logout)
-// router.post('/logout', logout); // Или реализовать POST logout endpoint если нужно
+// Маршрут для получения списка пользователей (доступен только авторизованным админам)
+// В этой простой реализации authMiddleware проверяет просто авторизацию любого пользователя
+// Для реальной админки нужна более сложная проверка ролей (is_admin и т.п.)
+router.get('/users', authMiddleware, getUsers);
+
 
 module.exports = router;

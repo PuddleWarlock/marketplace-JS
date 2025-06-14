@@ -4,41 +4,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Проект | <%= title %></title>
+    <title>Проект | <%= locals.title %></title> <!-- Используем locals для доступа к переменным -->
     <link rel="stylesheet" href="/styles.css">
-    <!-- Можно добавить специфичные стили для страницы, если они нужны -->
+    <!-- Добавляем опциональные специфичные стили для страницы, если они нужны -->
     <% if (locals.pageStyles) { %>
-        <link rel="stylesheet" href="/<%= pageStyles %>">
+        <link rel="stylesheet" href="/<%= locals.pageStyles %>">
     <% } %>
 </head>
 <body>
 
 <header>
-    <h1><%= title %></h1>
-    <%- include('partials/navigation', { user: locals.user }) %> <!-- Включаем навигацию, передаем user -->
+    <h1><%= locals.title %></h1>
+    <%- include('partials/navigation', { user: locals.user }) %> <!-- Включаем навигацию, передаем user из locals -->
 </header>
 
 <main class="container">
-    <!-- Здесь будет включаться контент конкретной страницы -->
-    <%- include(pageTemplate, locals) %> <!-- Включаем шаблон контента, передаем все локальные переменные (title, user, error, etc.) -->
+    <%
+    // Определяем CSS класс для макета контента в зависимости от страницы
+    let contentLayoutClass = '';
+    if (locals.pageTemplate === 'pages/auth') {
+        contentLayoutClass = 'auth-page-layout';
+    } else if (locals.pageTemplate === 'pages/contact') {
+        contentLayoutClass = 'contact-page-layout';
+    } else if (locals.pageTemplate === 'pages/404') {
+        contentLayoutClass = 'not-found-page-layout';
+    } else if (locals.pageTemplate === 'pages/error') {
+        contentLayoutClass = 'error-page-layout';
+    }
+    // Класс для 3-х колоночного макета (index, admin) не добавляется к самому .content,
+    // так как 3-х колоночная структура определяется div'ами внутри .content на этих страницах.
+    %>
+    <div class="content <%= contentLayoutClass %>"> <!-- Добавляем класс, только если он есть -->
+        <!-- Включаем содержимое страницы. Шаблон страницы ДОЛЖЕН содержать нужную структуру колонок -->
+        <%- include(locals.pageTemplate, locals) %>
+    </div>
 </main>
 
 <footer>
-    <!-- Здесь можно добавить футер, который будет на всех страницах -->
-    <p>Проект© <%= new Date().getFullYear() %></p>
+    <p>© Проект КБ-14 <%= new Date().getFullYear() %></p>
     <p class="response" id="response-status">Статус ответа: Ожидание...</p>
-    <!-- Кнопка обновления списка продуктов - видна только на главной и админке -->
-    <% if (pageTemplate === 'pages/index' || pageTemplate === 'pages/admin') { %>
-        <button class="button__refresh" onclick="if(typeof fetchProducts === 'function') fetchProducts(); else if(typeof fetchAdminProducts === 'function') fetchAdminProducts(); else alert('Функция обновления недоступна на этой странице');">
+    <!-- Кнопка обновления списка продуктов/данных - видна только на главной и админке -->
+    <% if (locals.pageTemplate === 'pages/index' || locals.pageTemplate === 'pages/admin') { %>
+        <button class="button__refresh"> <!-- Убрал onclick, будет в script.js -->
             <img class="refresh-icon" src="/icons/refresh-ccw.svg" alt="Обновить">
         </button>
     <% } %>
 </footer>
 
-<script src="/script.js"></script> <!-- Подключаем общий скрипт -->
-<!-- Можно добавить специфичные скрипты для страницы -->
+<script src="/script.js"></script>
 <% if (locals.pageScripts) { %>
-    <script src="/<%= pageScripts %>"></script>
+    <script src="/<%= locals.pageScripts %>"></script>
 <% } %>
 </body>
 </html>

@@ -6,7 +6,8 @@ const authMiddleware = (req, res, next) => {
         next();
     } else {
         // Если пользователь не авторизован, отправляем статус 401 и перенаправляем на страницу входа
-        res.status(401).redirect('/auth?error=Требуется авторизация');
+        // Добавляем originUrl в query для возможного редиректа обратно после входа (опционально)
+        res.status(401).redirect(`/auth?error=${encodeURIComponent('Требуется авторизация')}&origin=${encodeURIComponent(req.originalUrl)}`);
     }
 };
 

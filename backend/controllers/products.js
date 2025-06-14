@@ -1,24 +1,23 @@
 // backend\controllers\products.js
 const Product = require('../models/product');
-const { validationResult } = require('express-validator'); // Для валидации
+const { validationResult } = require('express-validator');
 
-// Вспомогательная функция для проверки ошибок валидации
+// Вспомогательная функция для обработки ошибок валидации (лучше сделать общей, но пока оставляем тут)
 const handleValidationErrors = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        // Отправляем JSON ответ с деталями ошибок валидации
         return res.status(400).json({ errors: errors.array() });
     }
-    next(); // Если ошибок нет, передаем управление следующему middleware/контроллеру
+    next();
 };
 
-const getProducts = async (req, res) => {
+
+const getProducts = async (req, res, next) => {
     try {
         const products = await Product.find();
-        // Установка заголовков Content-Type и статуса
-        res.status(200).setHeader('Content-Type', 'application/json').json(products);
+        res.status(200).json(products); // Content-Type: application/json устанавливается Express по умолчанию для json()
     } catch (error) {
-        // Логирование ошибки выполняется middleware обработки ошибок в server.js
-        // Отправка JSON ошибки пользователю также выполняется там
         next(error); // Передаем ошибку дальше
     }
 };
@@ -26,90 +25,123 @@ const getProducts = async (req, res) => {
 const getProductById = async (req, res, next) => {
     const { id } = req.params;
     try {
+        // Mongoose бросит CastError, если ID невалидный MongoID, она будет поймана в catch
         const product = await Product.findById(id);
         if (!product) {
-            // Создаем ошибку с нужным статусом, которую подхватит middleware обработки ошибок
-            const error = new Error('Product not found');
+            const error = new Error('Продукт не найден');
             error.status = 404;
             return next(error);
         }
-        res.status(200).setHeader('Content-Type', 'application/json').json(product);
+        res.status(200).json(product);
     } catch (error) {
-        // Если ID имеет неверный формат, Mongoose бросит ошибку, передаем ее дальше
-        error.status = 400; // Часто ошибки вроде CastError при неверном ID - это 400
+        // Ловим CastError или другие ошибки поиска
+        if (error.kind === 'ObjectId' || error.name === 'CastError') {
+            error.status = 400; // Неверный формат ID - это 400 Bad Request
+            error.message = 'Некорректный формат ID продукта';
+        } else {
+            error.status = 500; // Другие ошибки - 500 Internal Server Error
+            error.message = 'Ошибка при получении продукта';
+        }
         next(error);
     }
 };
 
 const createProduct = async (req, res, next) => {
-    // handleValidationErrors уже проверил req и отправил ответ, если были ошибки
-    // Если мы здесь, значит, валидация прошла успешно
+    // Валидация уже выполнена middleware в маршруте, handleValidationErrors отправил бы 400
     const { seller, name, description, price, category, quantity } = req.body;
     try {
         const newProduct = new Product({ seller, name, description, price, category, quantity });
         await newProduct.save();
-        res.status(201).setHeader('Content-Type', 'application/json').json(newProduct); // 201 Created
+        res.status(201).json(newProduct); // 201 Created
     } catch (error) {
-        next(error);
+        // Ловим ошибки сохранения (например, из-за ограничений схемы Mongoose, кроме required, которые уже валидируются express-validator)
+        next(error); // Передаем ошибку дальше
     }
 };
 
 const updateProduct = async (req, res, next) => {
     const { id } = req.params;
-    // handleValidationErrors уже проверил req
+    // Валидация id и полей обновления уже выполнена
     const updates = req.body;
-    // Удаляем поле updatedAt из обновлений, т.к. мы обновляем его вручную или через Mongoose timestamp (если настроено)
-    delete updates.updatedAt;
+    // Удаляем поля, которые не должны обновляться пользователем напрямую
+    delete updates._id;
+    delete updates.createdAt;
+    // updatedAt может обновляться автоматически Mongoose, если настроены timestamps в схеме
+    // Если timestamps не настроены, можно обновить его здесь:
+    updates.updatedAt = new Date();
 
 
     try {
-        // Можно добавить опцию { new: true } чтобы получить обновленный документ
-        const updatedProduct = await Product.findByIdAndUpdate(id, updates, { new: true });
+        // { new: true } возвращает обновленный документ
+        // { runValidators: true } запускает валидаторы Mongoose при обновлении (для полей с validate)
+        const updatedProduct = await Product.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
         if (!updatedProduct) {
-            const error = new Error('Product not found');
+            const error = new Error('Продукт не найден для обновления');
             error.status = 404;
             return next(error);
         }
-        res.status(200).setHeader('Content-Type', 'application/json').json(updatedProduct);
+        res.status(200).json(updatedProduct); // 200 OK
     } catch (error) {
-        error.status = 400; // Ошибки обновления часто 400
+        // Ловим ошибки обновления (например, валидация Mongoose, CastError)
+        if (error.name === 'CastError' || error.kind === 'ObjectId') {
+            error.status = 400;
+            error.message = 'Некорректный формат ID продукта';
+        } else if (error.name === 'ValidationError') {
+            // Ошибки валидации Mongoose при runValidators: true
+            error.status = 400;
+            // Mongoose ValidationError содержит details, можно распарсить, но express-validator лучше
+            error.message = `Ошибка валидации: ${error.message}`; // Mongoose Validation Error message already contains details
+        } else {
+            error.status = 500;
+            error.message = 'Ошибка при обновлении продукта';
+        }
         next(error);
     }
 };
 
 const deleteProduct = async (req, res, next) => {
     const { id } = req.params;
+    // Валидация id уже выполнена
     try {
         const deletedProduct = await Product.findByIdAndDelete(id);
         if (!deletedProduct) {
-            const error = new Error('Product not found');
+            const error = new Error('Продукт не найден для удаления');
             error.status = 404;
             return next(error);
         }
-        // Отправляем успешный ответ 200 OK
-        res.status(200).setHeader('Content-Type', 'application/json').json({ message: 'Product deleted', deletedId: id });
+        res.status(200).json({ message: 'Продукт успешно удален', deletedId: id }); // 200 OK
     } catch (error) {
-        error.status = 400; // Ошибки удаления часто 400
+        // Ловим CastError или другие ошибки
+        if (error.name === 'CastError' || error.kind === 'ObjectId') {
+            error.status = 400;
+            error.message = 'Некорректный формат ID продукта';
+        } else {
+            error.status = 500;
+            error.message = 'Ошибка при удалении продукта';
+        }
         next(error);
     }
 };
 
 const sortProducts = async (req, res, next) => {
-    const { by } = req.query;
+    const { by, order = 'asc' } = req.query; // Добавим возможность указывать порядок (asc/desc)
 
     // Базовая проверка поля сортировки
-    if (!['category', 'seller', 'price', 'name', '_id', 'createdAt'].includes(by)) {
-        const error = new Error('Invalid sort field. Allowed fields: category, seller, price, name, _id, createdAt');
+    const allowedSortFields = ['category', 'seller', 'price', 'name', '_id', 'createdAt', 'updatedAt', 'quantity'];
+    if (!allowedSortFields.includes(by)) {
+        const error = new Error(`Некорректное поле сортировки. Разрешенные поля: ${allowedSortFields.join(', ')}.`);
         error.status = 400;
         return next(error);
     }
 
+    // Проверка порядка сортировки
+    const sortOrder = (order.toLowerCase() === 'desc' || order === '-1') ? -1 : 1; // 1 for asc, -1 for desc
+
     try {
-        // Сортировка по возрастанию (1)
-        const sortedProducts = await Product.find().sort({ [by]: 1 });
-        res.status(200).setHeader('Content-Type', 'application/json').json(sortedProducts);
+        const sortedProducts = await Product.find().sort({ [by]: sortOrder });
+        res.status(200).json(sortedProducts);
     } catch (error) {
-        next(error); // Передаем ошибку дальше
+        next(error);
     }
 };
 
@@ -120,5 +152,5 @@ module.exports = {
     updateProduct,
     deleteProduct,
     sortProducts,
-    handleValidationErrors // Экспортируем для использования в маршрутах
+    handleValidationErrors // Экспортируем для использования в маршрутах products
 };

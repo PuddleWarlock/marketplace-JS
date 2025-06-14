@@ -3,23 +3,22 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs'); // Для хэширования паролей
 
 const userSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true }, // Username должен быть уникальным
-    password: { type: String, required: true },
+    username: { type: String, required: true, unique: true, trim: true, lowercase: true }, // Trim и lowercase для чистоты
+    password: { type: String, required: true, minlength: 6 }, // Минимальная длина пароля
     createdAt: { type: Date, default: Date.now }
 });
 
 // Middleware Mongoose: хэшируем пароль перед сохранением
 userSchema.pre('save', async function(next) {
-    // 'this' относится к документу, который сохраняется (новому пользователю)
-    if (!this.isModified('password')) { // Проверяем, был ли пароль изменен (нужно при обновлении пользователя)
+    if (!this.isModified('password')) {
         return next();
     }
     try {
-        const salt = await bcrypt.genSalt(10); // Генерируем "соль"
-        this.password = await bcrypt.hash(this.password, salt); // Хэшируем пароль
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
         next();
     } catch (err) {
-        next(err); // Передаем ошибку дальше
+        next(err);
     }
 });
 

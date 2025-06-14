@@ -1,84 +1,112 @@
-﻿<!-- backend\views\index.ejs -->
-
-
+﻿<!-- backend\views\pages\index.ejs -->
 <!-- Содержимое главной страницы -->
-<div class="content">
-    <div class="content_side__left">
-        <!-- Здесь может быть дополнительный контент или боковая панель -->
-        <section class="func-section__vertical sticky">
-            <h2>Информация о системе</h2>
-            <div class="info_buttons">
-                <button id="os-info-btn" class="button__info">OS Infааааааo</button>
-                <button id="file-info-btn" class="button__info">File Info</button>
-            </div>
-            <div id="info-display"></div>
-        </section>
 
-    </div>
-    <div class="content_center">
-        <!-- Поиск по ID -->
-        <section class="func-section__vertical search_section">
-            <div class="toggle-form_container drop-down interactive">
-                <h2 class="toggle-form_header search_header">Поиск продукта</h2>
-                <img src="/icons/chevron-down.svg" class="arrow-down-icon" alt="">
-            </div>
-            <div class="search hidden-form hidden-form__horizontal">
-                <input type="text" id="search-id" placeholder="ID продукта">
-                <img onclick="searchProduct()" src="/icons/scan-search.svg" class="search-icon interactive" alt="Найти">
-            </div>
-        </section>
+<% /* Этот шаблон включится внутрь <div class="content"> в layout.ejs */ %>
 
-        <!-- Фильтр и сортировка -->
-        <section class="func-section__vertical filter_section">
-            <div class="toggle-form_container drop-down interactive">
-                <h2 class="toggle-form_header">Фильтр по цене</h2>
-                <img src="/icons/chevron-down.svg" class="arrow-down-icon" alt="">
-            </div>
-            <div class="hidden-form__vertical hidden-form filter">
-                <label class="input-container">
-                    <span>От</span>
-                    <input type="number" id="min-price" placeholder="Мин. цена">
-                </label>
-                <label class="input-container">
-                    <span>До</span>
-                    <input type="number" id="max-price" placeholder="Макс. цена">
-                </label>
-                <button onclick="filterProducts()">Применить фильтр</button>
-            </div>
-        </section>
-        <section class="func-section__vertical sort_section">
-            <h2>Сортировка</h2>
-            <div class="sort">
-                <button id="sort-by-category-btn">По категории</button>
-                <button id="sort-by-seller-btn">По продавцу</button>
-                <button id="sort-by-price-btn">По цене</button> <!-- Добавим сортировку по цене -->
-                <button id="sort-by-name-btn">По имени</button> <!-- Добавим сортировку по имени -->
-            </div>
-        </section>
+<div class="content_side__left">
+    <!-- Блок 1: Информация о системе -->
+    <section class="info-block func-section__vertical sticky">
+        <h2>Информация о системе</h2>
+        <div class="info_buttons">
+            <button id="os-info-btn" class="button__info">OS Info</button>
+            <button id="file-info-btn" class="button__info">File Info</button>
+        </div>
+        <div id="info-display"></div>
+    </section>
 
+    <!-- Блок 2: Дополнительная информация (пример) -->
+    <section class="info-block func-section__vertical">
+        <h2>Свежие новости</h2>
+        <p>Читайте последние новости о наших обновлениях и специальных предложениях.</p>
+        <p><a href="#">Читать подробнее...</a></p>
+    </section>
 
-        <!-- Список продуктов будет загружен через JS -->
+    <!-- Блок 3: Еще один информационный блок -->
+    <section class="info-block func-section__vertical">
+        <h2>О нас</h2>
+        <p>Мы молодая и амбициозная команда, стремящаяся сделать онлайн-покупки максимально удобными и безопасными.</p>
+        <p>Присоединяйтесь к нам!</p>
+    </section>
+
+</div>
+<div class="content_center">
+    <!-- Блок 4: Поиск продукта -->
+    <section class="func-section__vertical search_section">
+        <div class="toggle-form_container drop-down interactive">
+            <h2 class="toggle-form_header search_header">Поиск продукта</h2>
+            <img src="/icons/chevron-down.svg" class="arrow-down-icon" alt="">
+        </div>
+        <div class="search hidden-form hidden-form__horizontal">
+            <input type="text" id="search-id" placeholder="ID продукта">
+            <img src="/icons/scan-search.svg" class="search-icon interactive" alt="Найти">
+        </div>
+    </section>
+
+    <!-- Блок 5: Фильтр по цене -->
+    <section class="func-section__vertical filter_section">
+        <div class="toggle-form_container drop-down interactive">
+            <h2 class="toggle-form_header">Фильтр по цене</h2>
+            <img src="/icons/chevron-down.svg" class="arrow-down-icon" alt="">
+        </div>
+        <div class="hidden-form__vertical hidden-form filter">
+            <label class="input-container">
+                <span>От</span>
+                <input type="number" id="min-price" placeholder="Мин. цена">
+            </label>
+            <label class="input-container">
+                <span>До</span>
+                <input type="number" id="max-price" placeholder="Макс. цена">
+            </label>
+            <button id="filter-price-btn">Применить фильтр</button> <% /* Добавляем ID для обработчика в JS */ %>
+        </div>
+    </section>
+
+    <!-- Блок 6: Сортировка -->
+    <section class="func-section__vertical sort_section">
+        <h2>Сортировка</h2>
+        <div class="sort-buttons">
+            <button id="sort-by-category-btn">По категории</button>
+            <button id="sort-by-seller-btn">По продавцу</button>
+            <button id="sort-by-price-btn">По цене</button>
+            <button id="sort-by-name-btn">По имени</button>
+            <button id="sort-by-quantity-btn">По количеству</button>
+            <button id="sort-by-created-btn">По дате добавления</button>
+            <button id="sort-by-updated-btn">По дате обновления</button>
+        </div>
+    </section>
+
+    <!-- Блок 7: Список продуктов -->
+    <section class="products-section func-section__vertical">
         <h2>Список продуктов</h2>
-        <div id="product-list">
-            <!-- Продукты будут добавлены сюда скриптом -->
+        <div id="product-list" class="product-grid">
+            <!-- Продукты будут добавлены сюда скриптом fetchProducts -->
             <p>Загрузка продуктов...</p>
         </div>
+    </section>
 
-    </div>
-    <div class="content_side__right">
-        <!-- Здесь может быть дополнительный контент или боковая панель -->
-        <!-- Например, блок с полезной информацией, как в требовании для ИМ -->
-        <section>
-            <h2>Полезная информация</h2>
-            <p>Здесь может быть текст о преимуществах ваших товаров или условиях доставки.</p>
-            <p>Пример: Быстрая доставка по всей стране!</p>
-            <img src="https://via.placeholder.com/250x150" alt="Пример полезной картинки">
-            <p>Текст под картинкой.</p>
-            <p>Еще блок информации.</p>
-            <img src="https://via.placeholder.com/250x150" alt="Пример полезной картинки 2">
-            <p>Текст под картинкой 2.</p>
-            <!-- Согласно требованию, 5 картинок подряд не считаются элементами, но блоки с текстом и картинками - считаются -->
-            <!-- Здесь 2 блока (текст+картинка) + блок текста сверху = 3 блока. Добавьте еще 2 блока -->
-        </section>
-    </div>
+</div>
+<div class="content_side__right">
+    <!-- Блок 8: Блок полезной информации 1 -->
+    <section class="info-block func-section__vertical">
+        <h2>Почему выбирают нас?</h2>
+        <p>Мы предлагаем лучшие цены и широкий ассортимент товаров.</p>
+        <img src="/images/quality.jpg" alt="Качество" class="info-image">
+        <p>Высокое качество продукции гарантировано.</p>
+    </section>
+
+    <!-- Блок 9: Блок полезной информации 2 -->
+    <section class="info-block func-section__vertical">
+        <h2>Быстрая доставка</h2>
+        <p>Оперативно доставляем заказы по всей стране.</p>
+        <img src="/images/delivery.jpg" alt="Доставка" class="info-image">
+        <p>Сроки доставки минимальны.</p>
+    </section>
+
+    <!-- Блок 10: Блок полезной информации 3 -->
+    <section class="info-block func-section__vertical">
+        <h2>Поддержка клиентов 24/7</h2>
+        <p>Наша служба поддержки всегда готова помочь.</p>
+        <p>Звоните или пишите нам в любое время!</p>
+    </section>
+
 </div>
