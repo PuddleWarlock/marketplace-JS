@@ -1,11 +1,11 @@
-﻿﻿<!-- backend\views\pages\admin.ejs -->
+﻿<!-- backend\views\pages\admin.ejs -->
 <!-- Содержимое страницы администратора -->
 
 <% /* Этот шаблон включится внутрь <div class="content"> в layout.ejs */ %>
 
 <div class="content_side__left">
     <!-- Блок 1: Админ меню / Ссылки -->
-    <section class="admin-menu func-section__vertical sticky">
+    <section class="admin-menu func-section__vertical"> <% /* Убран класс sticky */ %>
         <h2>Администрирование</h2>
         <ul>
             <li><a href="#add-product-form-section">Добавить продукт</a></li>
@@ -135,7 +135,7 @@
 </div>
 <div class="content_side__right">
     <!-- Блок 8: Инструкции для админа -->
-    <section class="info-block func-section__vertical sticky">
+    <section class="info-block func-section__vertical"> <% /* Убран класс sticky */ %>
         <h2>Инструкции</h2>
         <p>Используйте формы в центре для добавления и редактирования продуктов.</p>
         <p>Для удаления продукта, кликните по нему в списке и нажмите кнопку "Удалить" на карточке.</p>

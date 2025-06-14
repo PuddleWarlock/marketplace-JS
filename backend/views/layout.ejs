@@ -19,23 +19,9 @@
 </header>
 
 <main class="container">
-    <%
-    // Определяем CSS класс для макета контента в зависимости от страницы
-    let contentLayoutClass = '';
-    if (locals.pageTemplate === 'pages/auth') {
-        contentLayoutClass = 'auth-page-layout';
-    } else if (locals.pageTemplate === 'pages/contact') {
-        contentLayoutClass = 'contact-page-layout';
-    } else if (locals.pageTemplate === 'pages/404') {
-        contentLayoutClass = 'not-found-page-layout';
-    } else if (locals.pageTemplate === 'pages/error') {
-        contentLayoutClass = 'error-page-layout';
-    }
-    // Класс для 3-х колоночного макета (index, admin) не добавляется к самому .content,
-    // так как 3-х колоночная структура определяется div'ами внутри .content на этих страницах.
-    %>
-    <div class="content <%= contentLayoutClass %>"> <!-- Добавляем класс, только если он есть -->
-        <!-- Включаем содержимое страницы. Шаблон страницы ДОЛЖЕН содержать нужную структуру колонок -->
+    <% /* Базовый класс content всегда применяется */ %>
+    <div class="content">
+        <!-- Включаем содержимое страницы. Шаблон страницы ДОЛЖЕН содержать структуру колонок -->
         <%- include(locals.pageTemplate, locals) %>
     </div>
 </main>

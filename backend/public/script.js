@@ -138,18 +138,9 @@ const fetchProducts = async () => {
     try {
         const response = await fetch(API_URL);
         if (!response.ok) {
-            // Attempt to read JSON error response if available, otherwise just text
-            // const errorBody = await response.text(); // Read body as text first
-            // let errorDetail = errorBody;
-            // try {
-            //     const jsonError = JSON.parse(errorBody);
-            //     if (jsonError.error) errorDetail = jsonError.error;
-            // } catch (e) { /* body was not JSON */ }
-
             const result = await response.json().catch(() => ({ error: response.statusText }));
             const errorDetail = result.error || response.statusText || 'Неизвестная ошибка';
 
-            // throw new Error(`Ошибка HTTP: ${response.status} ${response.statusText} - ${errorDetail}`);
             productList.innerHTML = `<p style="color: red;">Не удалось загрузить продукты.<br>${errorDetail}</p>`;
             updateResponse(response);
             return; // Stop execution
@@ -236,8 +227,6 @@ const searchProduct = async () => {
             const product = await response.json();
             renderProducts([product], 'product-list');
         } else {
-            // const result = await response.headers.get('content-type')?.includes('application/json') ? await response.json() : { error: await response.text() };
-            // productList.innerHTML = `<p style="color: red;">${result.error || response.statusText || 'Ошибка при поиске'}</p>`;
             const result = await response.json().catch(() => ({ error: response.statusText })); // Attempt JSON, fallback to statusText
             productList.innerHTML = `<p style="color: red;">${result.error || response.statusText || 'Ошибка при поиске'}</p>`;
         }
@@ -263,12 +252,6 @@ const filterProducts = async () => {
     try {
         const response = await fetch(API_URL);
         if (!response.ok) {
-            // const errorBody = await response.text();
-            // let errorDetail = errorBody;
-            // try {
-            //     const jsonError = JSON.parse(errorBody);
-            //     if (jsonError.error) errorDetail = jsonError.error;
-            // } catch (e) { /* body was not JSON */ }
             const result = await response.json().catch(() => ({ error: response.statusText }));
             throw new Error(`Ошибка HTTP: ${response.status} ${response.statusText} - ${result.error}`);
         }
@@ -403,26 +386,15 @@ const fetchAdminProducts = async () => {
     try {
         const response = await fetch(API_URL); // Запрос всех продуктов
         if (!response.ok) {
-            // Если не OK, возможно нужна авторизация или другая ошибка
-            // const errorBody = await response.text();
-            // let errorDetail = errorBody;
-            // try {
-            //     const jsonError = JSON.parse(errorBody);
-            //     if (jsonError.error) errorDetail = jsonError.error;
-            // } catch (e) { /* body was not JSON */ }
             const result = await response.json().catch(() => ({ error: response.statusText }));
             const errorDetail = result.error || 'Неизвестная ошибка';
 
-
             if (response.status === 401) {
-                // Перенаправление на страницу авторизации выполнит authMiddleware на сервере
-                // Если 401 получен в Fetch на защищенной странице, значит серверный middleware не сработал?
-                // Или мы пытаемся фетчить с клиента, который не авторизован?
-                // В любом случае, при 401 на API запросе с админки, лучше показать сообщение и, возможно, подсказать авторизоваться.
-                // Серверный authMiddleware уже должен перенаправить ПАГЕ, если она защищена.
-                // Этот код сработает, если вы на админке, а сессия ИСТЕКЛА.
+                // Если 401 получен в Fetch на защищенной странице (админке),
+                // серверный authMiddleware уже перенаправит страницу на /auth.
+                // Этот код для API запроса может сработать, если сессия истекла ПОСЛЕ загрузки страницы.
+                // В этом случае, просто покажем сообщение и предложим войти, без редиректа отсюда.
                 productList.innerHTML = `<p style="color: orange;">Ошибка авторизации или сессия истекла. ${errorDetail}.<br><a href="/auth?origin=${encodeURIComponent(window.location.pathname)}">Войти</a></p>`;
-                // НЕ делаем window.location.href отсюда, чтобы избежать циклов редиректа или двойных сообщений.
             } else {
                 productList.innerHTML = `<p style="color: red;">Не удалось загрузить продукты для администрирования.<br>${errorDetail || ''}</p>`;
             }
@@ -461,13 +433,11 @@ const fetchContactMessages = async () => {
 
             if (response.status === 401) {
                 messagesList.innerHTML = `<p style="color: orange;">Ошибка авторизации или сессия истекла. ${errorDetail}.<br><a href="/auth?origin=${encodeURIComponent(window.location.pathname)}">Войти</a></p>`;
-                // НЕ делаем window.location.href отсюда
             } else {
                 messagesList.innerHTML = `<p style="color: red;">Не удалось загрузить сообщения.<br>${errorDetail || ''}</p>`;
             }
             updateResponse(response);
             return;
-
         }
         const messages = await response.json();
 
@@ -515,13 +485,11 @@ const fetchUsers = async () => {
 
             if (response.status === 401) {
                 usersList.innerHTML = `<p style="color: orange;">Ошибка авторизации или сессия истекла. ${errorDetail}.<br><a href="/auth?origin=${encodeURIComponent(window.location.pathname)}">Войти</a></p>`;
-                // НЕ делаем window.location.href отсюда
             } else {
                 usersList.innerHTML = `<p style="color: red;">Не удалось загрузить пользователей.<br>${errorDetail || ''}</p>`;
             }
             updateResponse(response);
             return;
-
         }
         const users = await response.json();
 
@@ -670,13 +638,8 @@ const handleAddProductSubmit = async (e) => {
             if (response.status === 400 && result.errors) {
                 displayErrors(result.errors, 'add-form-errors');
             } else {
+                // Removed specific 401 check here, relying on server-side page redirect or general error message
                 displayErrors(result.error || response.statusText || 'Неизвестная ошибка при добавлении.', 'add-form-errors');
-                if (response.status === 401) {
-                    // Redirect to auth page if 401 (shouldn't happen if server middleware is working, but fallback)
-                    // window.location.href = `/auth?error=${encodeURIComponent('Требуется авторизация')}&origin=${encodeURIComponent(window.location.pathname)}`;
-                    // Instead of redirect, just show message. Server-side middleware handles page redirects.
-                    displayErrors('Требуется авторизация для добавления продукта.', 'add-form-errors');
-                }
             }
         }
     } catch (error) {
@@ -758,13 +721,8 @@ const handleEditProductSubmit = async (e) => {
             if (response.status === 400 && result.errors) {
                 displayErrors(result.errors, 'edit-form-errors');
             } else {
+                // Removed specific 401/404 checks here, relying on general error message
                 displayErrors(result.error || response.statusText || 'Неизвестная ошибка при редактировании.', 'edit-form-errors');
-                if (response.status === 401) {
-                    // window.location.href = `/auth?error=${encodeURIComponent('Требуется авторизация')}&origin=${encodeURIComponent(window.location.pathname)}`;
-                    displayErrors('Требуется авторизация для редактирования продукта.', 'edit-form-errors');
-                } else if (response.status === 404) {
-                    displayErrors('Продукт не найден для редактирования.', 'edit-form-errors');
-                }
             }
         }
     } catch (error) {
@@ -855,8 +813,7 @@ const handleLoginFormSubmit = async (e) => {
     const loginForm = document.getElementById('login-form');
     if (!loginForm) return; // Check form existence
     const loginErrorsDiv = document.getElementById('login-errors');
-    const loginSuccessDiv = document.getElementById('login-success'); // Add this div in auth.ejs
-    // const pageAuthErrorDiv = document.getElementById('page-auth-error'); // Не очищаем здесь page-level error
+    const loginSuccessDiv = document.getElementById('login-success');
 
 
     clearMessages('login-errors', 'login-success'); // Clear form-specific messages
@@ -882,7 +839,6 @@ const handleLoginFormSubmit = async (e) => {
         updateResponse(response);
 
         if (response.ok) { // Status 200 OK
-            // alert('Вход выполнен успешно!'); // Removed alert
             if(loginSuccessDiv) displayErrors('Вход выполнен успешно! Перенаправление...', 'login-success'); // Show success message
 
             // Redirect to the page user came from, or admin page by default
@@ -916,8 +872,7 @@ const handleRegisterFormSubmit = async (e) => {
     const registerForm = document.getElementById('register-form');
     if (!registerForm) return; // Check form existence
     const registerErrorsDiv = document.getElementById('register-errors');
-    const registerSuccessDiv = document.getElementById('register-success'); // Add this div in auth.ejs
-    // const pageAuthErrorDiv = document.getElementById('page-auth-error'); // Не очищаем здесь page-level error
+    const registerSuccessDiv = document.getElementById('register-success');
 
 
     clearMessages('register-errors', 'register-success'); // Clear form-specific messages
@@ -956,7 +911,6 @@ const handleRegisterFormSubmit = async (e) => {
         updateResponse(response);
 
         if (response.ok) { // Status 200 OK or 201 Created
-            // alert('Регистрация успешна! Теперь вы авторизованы.'); // Removed alert
             if(registerSuccessDiv) displayErrors('Регистрация успешна! Перенаправление...', 'register-success'); // Show success message
 
             // Автоматически авторизуем после регистрации (сервер это уже сделал, здесь только перенаправление)
@@ -1014,9 +968,7 @@ const initializeAuthPage = () => {
             loginFormContainer.style.display = 'none';
             registerFormContainer.style.display = 'block';
             loginForm.reset();
-            // clearMessages('login-errors', 'login-success'); // Очищаем через clearAllAuthMessages
             registerForm.reset(); // Also reset register form when switching to it
-            // clearMessages('register-errors', 'register-success'); // Очищаем через clearAllAuthMessages
             clearAllAuthMessages();
         });
 
@@ -1025,9 +977,7 @@ const initializeAuthPage = () => {
             registerFormContainer.style.display = 'none';
             loginFormContainer.style.display = 'block';
             registerForm.reset(); // Also reset register form when switching from it
-            // clearMessages('register-errors', 'register-success'); // Очищаем через clearAllAuthMessages
             loginForm.reset();
-            // clearMessages('login-errors', 'login-success'); // Очищаем через clearAllAuthMessages
             clearAllAuthMessages();
         });
 
@@ -1041,10 +991,7 @@ const initializeAuthPage = () => {
         if (errorMessage) {
             // Display the page-level error in the dedicated div
             displayErrors(decodeURIComponent(errorMessage), 'page-auth-error');
-            // Optional: Remove the error from the URL after displaying
-            // This prevents the message from reappearing on refresh, but might be bad for user experience if they expect refresh to preserve state.
-            // history.replaceState(null, '', window.location.pathname + window.location.search.replace(/([?&])error=.*?(&|$)/, '$1').replace(/^[?&]$/, ''));
-            // Simplified: Remove the error parameter entirely, keeping others (like origin)
+            // Remove the error parameter entirely, keeping others (like origin)
             urlParams.delete('error');
             history.replaceState(null, '', window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : ''));
 
@@ -1057,26 +1004,23 @@ const initializeAuthPage = () => {
         // Determine which form to show initially based on URL or default
         const action = urlParams.get('action');
         if (action === 'register') {
-            // showRegisterLink.click(); // Simulate click - might trigger unexpected events
-            // Instead, just manually set display and clear messages
+            // Manually set display and clear messages
             loginFormContainer.style.display = 'none';
             registerFormContainer.style.display = 'block';
-            clearMessages('login-errors', 'login-success');
+            clearMessages('login-errors', 'login-success'); // Clear login form messages if showing register
             registerForm.reset();
-            clearMessages('register-errors', 'register-success');
-
+            clearMessages('register-errors', 'register-success'); // Clear register form messages
         } else {
             // Default is login form (already visible by default HTML/CSS)
             // Ensure register form is hidden
             loginFormContainer.style.display = 'block';
             registerFormContainer.style.display = 'none';
-            clearMessages('register-errors', 'register-success');
+            clearMessages('register-errors', 'register-success'); // Clear register form messages if showing login
             loginForm.reset();
-            clearMessages('login-errors', 'login-success');
+            clearMessages('login-errors', 'login-success'); // Clear login form messages
         }
-        // Need to clear messages again *after* setting initial display, as reset() might be called
-        clearAllAuthMessages(); // Clear all at the very end of initialization
-
+        // Clear all messages one last time to be sure after state is set
+        clearAllAuthMessages();
 
     } else {
         console.warn("Auth page elements not found. initializeAuthPage skipped.");
@@ -1149,8 +1093,6 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchContactMessages(); // Refresh messages
             fetchUsers(); // Refresh users
         } else {
-            // For other pages, this button might not be present or relevant
-            // alert('Обновление данных недоступно на этой странице.'); // Убрал alert
             const responseStatus = document.getElementById('response-status');
             if (responseStatus) {
                 responseStatus.textContent = 'Обновление данных недоступно на этой странице.';

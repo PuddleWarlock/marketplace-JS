@@ -1,8 +1,16 @@
-﻿﻿<!-- backend\views\pages\404.ejs -->
+﻿<!-- backend\views\pages\404.ejs -->
 <!-- Содержимое страницы 404 -->
 
-<% /* Этот шаблон включится внутрь <div class="content not-found-page-layout"> в layout.ejs */ %>
+<% /* Этот шаблон включится внутрь <div class="content"> в layout.ejs */ %>
 
+<div class="content_side__left">
+    <% /* Левая боковая панель */ %>
+    <!-- Можно добавить сюда какой-либо контент, если нужно -->
+    <section class="func-section__vertical">
+        <h2>Дополнительно</h2>
+        <p>Это левая панель на странице 404.</p>
+    </section>
+</div>
 <div class="content_center">
     <!-- Блок 1: Основное сообщение -->
     <section class="func-section__vertical">
@@ -52,6 +60,12 @@
         <h3>Совет</h3>
         <p>Проверьте правильность написания адреса страницы.</p>
     </section>
-
 </div>
-<% /* Боковые колонки скрыты через CSS в layout.ejs */ %>
+<div class="content_side__right">
+    <% /* Правая боковая панель */ %>
+    <!-- Можно добавить сюда какой-либо контент, если нужно -->
+    <section class="func-section__vertical">
+        <h2>Помощь</h2>
+        <p>Если вы потерялись, попробуйте воспользоваться меню навигации.</p>
+    </section>
+</div>

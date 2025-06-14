@@ -1,11 +1,11 @@
-﻿﻿<!-- backend\views\pages\contact.ejs -->
+﻿<!-- backend\views\pages\contact.ejs -->
 <!-- Содержимое страницы обратной связи -->
 
-<% /* Этот шаблон включится внутрь <div class="content contact-page-layout"> в layout.ejs */ %>
+<% /* Этот шаблон включится внутрь <div class="content"> в layout.ejs */ %>
 
 <div class="content_side__left">
     <!-- Блок 1: Контактные данные -->
-    <section class="contact-details func-section__vertical sticky">
+    <section class="contact-details func-section__vertical"> <% /* Убран класс sticky */ %>
         <h2>Наши контакты</h2>
         <p><b>Адрес:</b> ул. Примерная, д. 1, г. Городск, 123456</p>
         <p><b>Телефон:</b> +7 (123) 456-78-90</p>
@@ -71,7 +71,7 @@
 </div>
 <div class="content_side__right">
     <!-- Блок 5: Карта -->
-    <section class="contact-map func-section__vertical sticky">
+    <section class="contact-map func-section__vertical"> <% /* Убран класс sticky */ %>
         <h2>Мы на карте</h2>
         <!-- Placeholder для карты -->
         <div class="map-placeholder">
