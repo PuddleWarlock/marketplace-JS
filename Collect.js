@@ -6,27 +6,31 @@ async function combineFiles(startPath, outputFile) {
         const outputStream = await fs.open(outputFile, 'w');
 
         async function processDirectory(currentPath) {
-            // Пропускаем папку logs
-            if (path.basename(currentPath) === 'logs' || path.basename(currentPath) === 'node_modules') {
+            // Skip folders
+            if (path.basename(currentPath) === 'node_modules' ||
+                path.basename(currentPath) === 'storybook-static' ||
+                path.basename((currentPath)) === "logs") {
                 return;
             }
 
-            const entries = await fs.readdir(currentPath, { withFileTypes: true });
+            const entries = await fs.readdir(currentPath, {withFileTypes: true});
 
             for (const entry of entries) {
                 const fullPath = path.join(currentPath, entry.name);
+                const ext = path.extname(entry.name).toLowerCase();
 
                 if (entry.isDirectory()) {
-                    // Рекурсивно обрабатываем подпапки
+                    // Recursively process subdirectories
                     await processDirectory(fullPath);
-                } else if (entry.isFile()) {
+                } else if (entry.isFile() &&
+                    !['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp', '.ico', '.avif', '.svg','.ico'].includes(ext) && !fullPath.includes("package-lock.json")) {
                     try {
-                        // Читаем содержимое файла
+                        // Read file content
                         const content = await fs.readFile(fullPath, 'utf8');
-                        // Записываем путь файла и его содержимое в выходной файл
+                        // Write file path and content to output file
                         await outputStream.write(`\n\n=== ${fullPath} ===\n${content}`);
                     } catch (err) {
-                        console.error(`Ошибка при чтении файла ${fullPath}: ${err.message}`);
+                        console.error(`Error reading file ${fullPath}: ${err.message}`);
                     }
                 }
             }
@@ -34,13 +38,13 @@ async function combineFiles(startPath, outputFile) {
 
         await processDirectory(startPath);
         await outputStream.close();
-        console.log(`Все файлы объединены в ${outputFile}`);
+        console.log(`All files combined into ${outputFile}`);
     } catch (err) {
-        console.error(`Ошибка: ${err.message}`);
+        console.error(`Error: ${err.message}`);
     }
 }
 
-// Пример использования
-const startPath = './backend'; // Укажите начальную папку
-const outputFile = './output.txt'; // Укажите путь к выходному файлу
+// Example usage
+const startPath = './backend'; // Specify the starting folder
+const outputFile = './output.txt'; // Specify the output file path
 combineFiles(startPath, outputFile);

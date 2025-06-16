@@ -115,11 +115,11 @@ const displayErrors = (errors, errorsDivId) => {
 const clearMessages = (errorsDivId, successDivId) => {
     const errorsDiv = document.getElementById(errorsDivId);
     const successDiv = document.getElementById(successDivId);
-    if(errorsDiv) {
+    if (errorsDiv) {
         errorsDiv.innerHTML = '';
         errorsDiv.style.display = 'none'; // Ensure it's hidden
     }
-    if(successDiv) {
+    if (successDiv) {
         successDiv.innerHTML = '';
         successDiv.style.display = 'none'; // Ensure it's hidden
     }
@@ -138,7 +138,7 @@ const fetchProducts = async () => {
     try {
         const response = await fetch(API_URL);
         if (!response.ok) {
-            const result = await response.json().catch(() => ({ error: response.statusText }));
+            const result = await response.json().catch(() => ({error: response.statusText}));
             const errorDetail = result.error || response.statusText || 'Неизвестная ошибка';
 
             productList.innerHTML = `<p style="color: red;">Не удалось загрузить продукты.<br>${errorDetail}</p>`;
@@ -227,7 +227,7 @@ const searchProduct = async () => {
             const product = await response.json();
             renderProducts([product], 'product-list');
         } else {
-            const result = await response.json().catch(() => ({ error: response.statusText })); // Attempt JSON, fallback to statusText
+            const result = await response.json().catch(() => ({error: response.statusText})); // Attempt JSON, fallback to statusText
             productList.innerHTML = `<p style="color: red;">${result.error || response.statusText || 'Ошибка при поиске'}</p>`;
         }
 
@@ -252,7 +252,7 @@ const filterProducts = async () => {
     try {
         const response = await fetch(API_URL);
         if (!response.ok) {
-            const result = await response.json().catch(() => ({ error: response.statusText }));
+            const result = await response.json().catch(() => ({error: response.statusText}));
             throw new Error(`Ошибка HTTP: ${response.status} ${response.statusText} - ${result.error}`);
         }
         const products = await response.json();
@@ -283,7 +283,7 @@ const fetchOSInfo = async () => {
     try {
         const response = await fetch(`${INFO_API_URL}/os`);
         if (!response.ok) {
-            const result = await response.json().catch(() => ({ error: response.statusText }));
+            const result = await response.json().catch(() => ({error: response.statusText}));
             throw new Error(`Ошибка HTTP: ${response.status} ${response.statusText} - ${result.error}`);
         }
         const osInfo = await response.json();
@@ -294,7 +294,7 @@ const fetchOSInfo = async () => {
     } catch (error) {
         console.error('Error fetching OS info:', error);
         updateResponse(error);
-        displayInfo('Информация об OS', { error: `Не удалось загрузить информацию об OS.<br>${error.message || ''}` }, 'info-display');
+        displayInfo('Информация об OS', {error: `Не удалось загрузить информацию об OS.<br>${error.message || ''}`}, 'info-display');
     }
 };
 
@@ -328,7 +328,7 @@ const fetchFileInfo = async () => {
     } catch (error) {
         console.error('Error fetching file info:', error);
         updateResponse(error);
-        displayInfo('Информация о файле', { error: `Не удалось загрузить информацию о файле.<br>${error.message || ''}` }, 'info-display');
+        displayInfo('Информация о файле', {error: `Не удалось загрузить информацию о файле.<br>${error.message || ''}`}, 'info-display');
     }
 };
 
@@ -358,7 +358,7 @@ const fetchSortedProducts = async (sortBy, order = 'asc') => { // Добавле
         const response = await fetch(`${API_URL}/sort?by=${sortBy}&order=${order}`);
         if (!response.ok) {
             // const result = await response.headers.get('content-type')?.includes('application/json') ? await response.json() : { error: await response.text() };
-            const result = await response.json().catch(() => ({ error: response.statusText }));
+            const result = await response.json().catch(() => ({error: response.statusText}));
             throw new Error(result.error || `Ошибка HTTP: ${response.status} ${response.statusText}`);
         }
         const sortedProducts = await response.json();
@@ -386,7 +386,7 @@ const fetchAdminProducts = async () => {
     try {
         const response = await fetch(API_URL); // Запрос всех продуктов
         if (!response.ok) {
-            const result = await response.json().catch(() => ({ error: response.statusText }));
+            const result = await response.json().catch(() => ({error: response.statusText}));
             const errorDetail = result.error || 'Неизвестная ошибка';
 
             if (response.status === 401) {
@@ -408,7 +408,7 @@ const fetchAdminProducts = async () => {
         renderProducts(products, 'admin-product-list'); // Рендерим продукты в админке
         // Обновляем статистику продуктов
         const totalProductsSpan = document.getElementById('total-products');
-        if(totalProductsSpan) totalProductsSpan.textContent = products.length;
+        if (totalProductsSpan) totalProductsSpan.textContent = products.length;
 
 
     } catch (error) {
@@ -428,7 +428,7 @@ const fetchContactMessages = async () => {
     try {
         const response = await fetch(`${CONTACT_API_URL}/messages`); // API для получения сообщений
         if (!response.ok) {
-            const result = await response.json().catch(() => ({ error: response.statusText }));
+            const result = await response.json().catch(() => ({error: response.statusText}));
             const errorDetail = result.error || 'Неизвестная ошибка';
 
             if (response.status === 401) {
@@ -460,7 +460,7 @@ const fetchContactMessages = async () => {
 
         // Обновляем статистику сообщений
         const totalMessagesSpan = document.getElementById('total-messages'); // Исправлен ID
-        if(totalMessagesSpan) totalMessagesSpan.textContent = messages.length;
+        if (totalMessagesSpan) totalMessagesSpan.textContent = messages.length;
 
 
     } catch (error) {
@@ -480,7 +480,7 @@ const fetchUsers = async () => {
     try {
         const response = await fetch(`${AUTH_API_URL}/users`); // API для получения пользователей
         if (!response.ok) {
-            const result = await response.json().catch(() => ({ error: response.statusText }));
+            const result = await response.json().catch(() => ({error: response.statusText}));
             const errorDetail = result.error || 'Неизвестная ошибка';
 
             if (response.status === 401) {
@@ -512,7 +512,7 @@ const fetchUsers = async () => {
 
         // Обновляем статистику пользователей
         const totalUsersSpan = document.getElementById('total-users');
-        if(totalUsersSpan) totalUsersSpan.textContent = users.length;
+        if (totalUsersSpan) totalUsersSpan.textContent = users.length;
 
     } catch (error) {
         console.error('Error fetching users:', error);
@@ -578,7 +578,7 @@ const deleteProduct = async (id) => {
             }
 
         } else {
-            const result = await response.json().catch(() => ({ error: response.statusText }));
+            const result = await response.json().catch(() => ({error: response.statusText}));
             console.error('Error deleting product:', result.error || response.statusText);
             alert(`Ошибка при удалении продукта: ${result.error || response.statusText || 'Неизвестная ошибка'}`);
         }
@@ -632,7 +632,7 @@ const handleAddProductSubmit = async (e) => {
             // alert('Продукт успешно добавлен!'); // Removed alert
             addForm.reset();
             fetchAdminProducts(); // Refresh list
-            if(addSuccessDiv) displayErrors('Продукт успешно добавлен!', 'add-form-success'); // Use displayErrors for success
+            if (addSuccessDiv) displayErrors('Продукт успешно добавлен!', 'add-form-success'); // Use displayErrors for success
         } else {
             // Error handling based on status code and response body
             if (response.status === 400 && result.errors) {
@@ -684,13 +684,19 @@ const handleEditProductSubmit = async (e) => {
         // Allow price 0 or greater based on HTML min="0.01" might be inconsistent. Let's align with server side or HTML validation.
         // Server side says > 0. Let's stick to that.
         if (!isNaN(numPrice) && numPrice > 0) updatedProduct.price = numPrice; // Price must be > 0
-        else { displayErrors('Цена должна быть положительным числом.', 'edit-form-errors'); return; }
+        else {
+            displayErrors('Цена должна быть положительным числом.', 'edit-form-errors');
+            return;
+        }
     }
     if (seller !== '') updatedProduct.seller = seller;
     if (quantity !== '') {
         const numQuantity = Number(quantity);
         if (!isNaN(numQuantity) && numQuantity >= 0) updatedProduct.quantity = numQuantity; // Quantity >= 0
-        else { displayErrors('Количество должно быть целым неотрицательным числом.', 'edit-form-errors'); return; }
+        else {
+            displayErrors('Количество должно быть целым неотрицательным числом.', 'edit-form-errors');
+            return;
+        }
     }
 
 
@@ -715,7 +721,7 @@ const handleEditProductSubmit = async (e) => {
             // alert('Продукт успешно обновлен!'); // Removed alert
             // editForm.reset(); // Keep data in form for potential further editing
             fetchAdminProducts(); // Refresh list
-            if(editSuccessDiv) displayErrors('Продукт успешно обновлен!', 'edit-form-success'); // Show success message
+            if (editSuccessDiv) displayErrors('Продукт успешно обновлен!', 'edit-form-success'); // Show success message
         } else {
             // Error handling
             if (response.status === 400 && result.errors) {
@@ -770,7 +776,7 @@ const handleContactFormSubmit = async (e) => {
         updateResponse(response);
 
         if (response.ok) { // Status 200 or 201
-            if(contactSuccessDiv) displayErrors(result.message || 'Ваше сообщение успешно отправлено!', 'contact-form-success'); // Show success message
+            if (contactSuccessDiv) displayErrors(result.message || 'Ваше сообщение успешно отправлено!', 'contact-form-success'); // Show success message
             contactForm.reset(); // Clear form
             updateContactButtonState(); // Update button state
         } else {
@@ -832,14 +838,14 @@ const handleLoginFormSubmit = async (e) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({username, password}),
         });
 
         const result = await response.json(); // Expect JSON response
         updateResponse(response);
 
         if (response.ok) { // Status 200 OK
-            if(loginSuccessDiv) displayErrors('Вход выполнен успешно! Перенаправление...', 'login-success'); // Show success message
+            if (loginSuccessDiv) displayErrors('Вход выполнен успешно! Перенаправление...', 'login-success'); // Show success message
 
             // Redirect to the page user came from, or admin page by default
             const urlParams = new URLSearchParams(window.location.search);
@@ -904,14 +910,14 @@ const handleRegisterFormSubmit = async (e) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({username, password}),
         });
 
         const result = await response.json(); // Expect JSON response
         updateResponse(response);
 
         if (response.ok) { // Status 200 OK or 201 Created
-            if(registerSuccessDiv) displayErrors('Регистрация успешна! Перенаправление...', 'register-success'); // Show success message
+            if (registerSuccessDiv) displayErrors('Регистрация успешна! Перенаправление...', 'register-success'); // Show success message
 
             // Автоматически авторизуем после регистрации (сервер это уже сделал, здесь только перенаправление)
             const urlParams = new URLSearchParams(window.location.search);
@@ -1041,13 +1047,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // Attach event listeners for info and sort buttons (only present on main)
         document.getElementById('os-info-btn')?.addEventListener('click', fetchOSInfo);
         document.getElementById('file-info-btn')?.addEventListener('click', fetchFileInfo);
-        document.getElementById('sort-by-category-btn')?.addEventListener('click', () => { fetchSortedProducts('category'); });
-        document.getElementById('sort-by-seller-btn')?.addEventListener('click', () => { fetchSortedProducts('seller'); });
-        document.getElementById('sort-by-price-btn')?.addEventListener('click', () => { fetchSortedProducts('price'); });
-        document.getElementById('sort-by-name-btn')?.addEventListener('click', () => { fetchSortedProducts('name'); });
-        document.getElementById('sort-by-quantity-btn')?.addEventListener('click', () => { fetchSortedProducts('quantity'); });
-        document.getElementById('sort-by-created-btn')?.addEventListener('click', () => { fetchSortedProducts('createdAt', 'desc'); });
-        document.getElementById('sort-by-updated-btn')?.addEventListener('click', () => { fetchSortedProducts('updatedAt', 'desc'); });
+        document.getElementById('sort-by-category-btn')?.addEventListener('click', () => {
+            fetchSortedProducts('category');
+        });
+        document.getElementById('sort-by-seller-btn')?.addEventListener('click', () => {
+            fetchSortedProducts('seller');
+        });
+        document.getElementById('sort-by-price-btn')?.addEventListener('click', () => {
+            fetchSortedProducts('price');
+        });
+        document.getElementById('sort-by-name-btn')?.addEventListener('click', () => {
+            fetchSortedProducts('name');
+        });
+        document.getElementById('sort-by-quantity-btn')?.addEventListener('click', () => {
+            fetchSortedProducts('quantity');
+        });
+        document.getElementById('sort-by-created-btn')?.addEventListener('click', () => {
+            fetchSortedProducts('createdAt', 'desc');
+        });
+        document.getElementById('sort-by-updated-btn')?.addEventListener('click', () => {
+            fetchSortedProducts('updatedAt', 'desc');
+        });
 
         // Attach search button listener
         document.querySelector('.search_section .search-icon')?.addEventListener('click', searchProduct);
@@ -1102,7 +1122,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
-
-// Define the actual function bodies that were previously commented out or in EJS script blocks
-
-// (All function bodies are defined above)

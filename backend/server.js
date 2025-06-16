@@ -1,4 +1,6 @@
 // backend\server.js
+require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
@@ -21,7 +23,7 @@ server.use(express.urlencoded({ extended: true }));
 // 3. Настройка сессий (для простой авторизации страниц)
 // ВАЖНО: secret должен быть уникальным и храниться в безопасном месте (например, в переменных окружения)
 server.use(session({
-    secret: process.env.SESSION_SECRET || 'supersecretkeydefault', // Используем переменную окружения или дефолт
+    secret: process.env.SESSION_SECRET, // Используем переменную окружения или дефолт
     resave: false,
     saveUninitialized: false, // Не сохранять сессии без данных
     cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // secure: true для HTTPS в продакшне, maxAge для срока жизни
@@ -135,7 +137,7 @@ server.use((err, req, res, next) => {
 
 
 // Start server
-const PORT = process.env.PORT || 3000; // Используем переменную окружения или дефолт
+const PORT = process.env.PORT; // Используем переменную окружения или дефолт
 server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
