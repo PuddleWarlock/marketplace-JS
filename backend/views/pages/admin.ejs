@@ -1,11 +1,11 @@
-﻿<!-- backend\views\pages\admin.ejs -->
-<!-- Содержимое страницы администратора -->
+﻿
 
-<% /* Этот шаблон включится внутрь <div class="content"> в layout.ejs */ %>
+
+<%  %>
 
 <div class="content_side__left">
-    <!-- Блок 1: Админ меню / Ссылки -->
-    <section class="admin-menu func-section__vertical"> <% /* Убран класс sticky */ %>
+    
+    <section class="admin-menu func-section__vertical"> <%  %>
         <h2>Администрирование</h2>
         <ul>
             <li><a href="#add-product-form-section">Добавить продукт</a></li>
@@ -17,18 +17,18 @@
             <li><a href="/logs/errors.log" target="_blank">Логи ошибок</a></li>
         </ul>
     </section>
-    <!-- Блок 2: Статистика -->
+    
     <section class="admin-stats func-section__vertical">
         <h2>Статистика</h2>
         <p>Всего продуктов: <span id="total-products">-</span></p>
         <p>Всего пользователей: <span id="total-users">-</span></p>
-        <p>Всего сообщений: <span id="total-messages">-</span></p> <!-- Исправил ID и текст -->
+        <p>Всего сообщений: <span id="total-messages">-</span></p> 
     </section>
 </div>
 <div class="content_center">
     <h2>Панель администратора</h2>
 
-    <!-- Блок 3: Форма добавления продукта -->
+    
     <section id="add-product-form-section" class="func-section__vertical">
         <div class="toggle-form_container drop-down interactive">
             <h2 class="toggle-form_header">Добавить продукт</h2>
@@ -45,11 +45,11 @@
             </label>
             <label class="input-container">
                 <span>Описание</span>
-                <input type="text" id="description" placeholder="Описание"> <!-- Описание не обязательное -->
+                <input type="text" id="description" placeholder="Описание"> 
             </label>
             <label class="input-container">
                 <span>Цена</span>
-                <input type="number" id="price" placeholder="Цена" required min="0.01" step="0.01"> <!-- Валидация в HTML -->
+                <input type="number" id="price" placeholder="Цена" required min="0.01" step="0.01"> 
             </label>
             <label class="input-container">
                 <span>Продавец</span>
@@ -57,15 +57,15 @@
             </label>
             <label class="input-container">
                 <span>Количество</span>
-                <input type="number" id="quantity" placeholder="Количество" required min="0" step="1"> <!-- Валидация в HTML -->
+                <input type="number" id="quantity" placeholder="Количество" required min="0" step="1"> 
             </label>
             <button type="submit">Добавить продукт</button>
             <div id="add-form-errors" class="errors-display"></div>
-            <div id="add-form-success" class="success-display"></div> <!-- Добавил div для успеха -->
+            <div id="add-form-success" class="success-display"></div> 
         </form>
     </section>
 
-    <!-- Блок 4: Форма редактирования продукта -->
+    
     <section id="edit-product-form-section" class="func-section__vertical">
         <div class="toggle-form_container drop-down interactive">
             <h2 class="toggle-form_header">Редактировать продукт</h2>
@@ -102,40 +102,40 @@
             </label>
             <button type="submit">Сохранить изменения</button>
             <div id="edit-form-errors" class="errors-display"></div>
-            <div id="edit-form-success" class="success-display"></div> <!-- Добавил div для успеха -->
+            <div id="edit-form-success" class="success-display"></div> 
         </form>
     </section>
 
-    <!-- Блок 5: Список продуктов для выбора (для редактирования/удаления) -->
+    
     <section id="admin-product-list-section" class="products-section func-section__vertical">
         <h2>Продукты</h2>
         <p>Кликните по карточке продукта в списке ниже, чтобы автоматически заполнить форму редактирования.</p>
         <div id="admin-product-list" class="product-grid">
-            <!-- Продукты будут добавлены сюда скриптом fetchAdminProducts -->
+            
             <p>Загрузка продуктов...</p>
         </div>
     </section>
 
-    <!-- Блок 6: Сообщения обратной связи -->
+    
     <section id="contact-messages-section" class="func-section__vertical">
         <h2>Сообщения обратной связи</h2>
-        <div id="contact-messages-list"> <!-- Здесь будет список сообщений -->
+        <div id="contact-messages-list"> 
             <p>Загрузка сообщений...</p>
         </div>
     </section>
 
-    <!-- Блок 7: Управление пользователями -->
+    
     <section id="users-list-section" class="func-section__vertical">
         <h2>Пользователи</h2>
-        <div id="users-list-container"> <!-- Здесь будет список пользователей -->
+        <div id="users-list-container"> 
             <p>Загрузка пользователей...</p>
         </div>
     </section>
 
 </div>
 <div class="content_side__right">
-    <!-- Блок 8: Инструкции для админа -->
-    <section class="info-block func-section__vertical"> <% /* Убран класс sticky */ %>
+    
+    <section class="info-block func-section__vertical"> <%  %>
         <h2>Инструкции</h2>
         <p>Используйте формы в центре для добавления и редактирования продуктов.</p>
         <p>Для удаления продукта, кликните по нему в списке и нажмите кнопку "Удалить" на карточке.</p>

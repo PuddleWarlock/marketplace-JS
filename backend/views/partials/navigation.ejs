@@ -1,10 +1,10 @@
-﻿<!-- backend\views\partials\navigation.ejs -->
+﻿
 <nav>
     <ul>
         <li><a href="/">Главная</a></li>
         <li><a href="/admin">Панель администратора</a></li>
         <li><a href="/contact">Обратная связь</a></li>
-        <% if (locals.user) { %> <!-- Проверяем, что user существует и не null -->
+        <% if (locals.user) { %> 
         <li><a href="#">Привет, <%= locals.user.username %></a></li>
         <li><a href="/logout">Выйти</a></li>
         <% } else { %>
