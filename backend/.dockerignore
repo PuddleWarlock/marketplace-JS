@@ -3,6 +3,4 @@
 .gitignore
 logs/
 npm-debug.log
-Dockerfile
-docker-compose.yml
 .env

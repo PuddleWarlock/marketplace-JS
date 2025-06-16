@@ -10,7 +10,7 @@ services:
     volumes:
       - ./logs:/app/logs
     env_file:
-      - /backend/.env
+      - .env
     depends_on:
       - mongo
 
