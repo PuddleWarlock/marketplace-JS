@@ -1,0 +1,89 @@
+﻿<!-- backend\views\pages\contact.ejs -->
+<!-- Содержимое страницы обратной связи -->
+
+<% /* Этот шаблон включится внутрь <div class="content"> в layout.ejs */ %>
+
+<div class="content_side__left">
+    <!-- Блок 1: Контактные данные -->
+    <section class="contact-details func-section__vertical"> <% /* Убран класс sticky */ %>
+        <h2>Наши контакты</h2>
+        <p><b>Адрес:</b> ул. Примерная, д. 1, г. Городск, 123456</p>
+        <p><b>Телефон:</b> +7 (123) 456-78-90</p>
+        <p><b>Email:</b> support@yourmarketplace.com</p>
+        <p><b>Время работы:</b> Пн-Пт, 9:00 - 18:00</p>
+    </section>
+
+    <!-- Блок 2: Как нас найти -->
+    <section class="how-to-find func-section__vertical">
+        <h2>Как нас найти</h2>
+        <p>Наш офис расположен в центре города, недалеко от станции метро "Центральная".</p>
+        <p>Вход в здание с улицы.</p>
+    </section>
+
+</div>
+<div class="content_center">
+    <!-- Блок 3: Форма обратной связи -->
+    <section id="contact-form-section" class="func-section__vertical">
+        <h2>Форма обратной связи</h2>
+        <p>Заполните форму, и мы свяжемся с вами в ближайшее время.</p>
+
+        <form id="contact-form">
+            <label class="input-container">
+                <span>Ваше имя:</span>
+                <input type="text" id="contact-name" name="name" required>
+            </label>
+            <label class="input-container">
+                <span>Ваш Email:</span>
+                <input type="email" id="contact-email" name="email" required>
+            </label>
+            <label class="input-container">
+                <span>Сообщение:</span>
+                <textarea id="contact-message" name="message" rows="6" required></textarea>
+            </label>
+            <button type="submit" id="contact-submit-btn">Отправить сообщение</button>
+            <div id="contact-form-errors" class="errors-display"></div>
+            <div id="contact-form-success" class="success-display"></div>
+        </form>
+    </section>
+
+    <!-- Блок 4: Часто задаваемые вопросы (FAQ) -->
+    <section class="faq-section func-section__vertical">
+        <h2>Часто задаваемые вопросы</h2>
+        <div class="faq-item">
+            <h3>Как сделать заказ?</h3>
+            <p>Для оформления заказа выберите товар и добавьте его в корзину. Перейдите в корзину и следуйте инструкциям для завершения покупки.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Какие способы оплаты доступны?</h3>
+            <p>Мы принимаем оплату банковскими картами Visa, Mastercard, МИР, а также электронными кошельками и банковским переводом.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Могу ли я вернуть товар?</h3>
+            <p>Да, вы можете вернуть товар надлежащего качества в течение 14 дней с момента покупки, если он не был в употреблении и сохранены его товарный вид и упаковка.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Сколько стоит доставка?</h3>
+            <p>Стоимость доставки зависит от вашего региона и веса заказа. Точная стоимость будет рассчитана при оформлении заказа.</p>
+        </div>
+        <p>Полный список вопросов и ответов доступен по запросу.</p>
+    </section>
+
+</div>
+<div class="content_side__right">
+    <!-- Блок 5: Карта -->
+    <section class="contact-map func-section__vertical"> <% /* Убран класс sticky */ %>
+        <h2>Мы на карте</h2>
+        <!-- Placeholder для карты -->
+        <div class="map-placeholder">
+            <img src="/images/map-placeholder.jpg" alt="Карта">
+        </div>
+        <p>Нажмите на карту, чтобы открыть в полном размере.</p>
+    </section>
+    <!-- Блок 6: Дополнительный текст -->
+    <section class="info-block func-section__vertical">
+        <h2>Свяжитесь с нами</h2>
+        <p>Мы всегда рады помочь нашим клиентам.</p>
+        <p>Ваше мнение очень важно для нас!</p>
+    </section>
+</div>
+<!-- JS для контактной формы уже в script.js -->

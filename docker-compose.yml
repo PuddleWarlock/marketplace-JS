@@ -1,0 +1,26 @@
+﻿version: '3.8'
+
+services:
+  # Сервис для вашего Node.js приложения
+  app:
+    build: .
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./logs:/app/logs
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+
+  # Сервис для базы данных MongoDB
+  mongo:
+    image: mongo:6
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+
+# Docker-том для персистентного хранения данных БД
+volumes:
+  mongo-data:

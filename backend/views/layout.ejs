@@ -1,0 +1,45 @@
+﻿<!-- backend\views\layout.ejs -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проект | <%= locals.title %></title> <!-- Используем locals для доступа к переменным -->
+    <link rel="stylesheet" href="/styles.css">
+    <!-- Добавляем опциональные специфичные стили для страницы, если они нужны -->
+    <% if (locals.pageStyles) { %>
+        <link rel="stylesheet" href="/<%= locals.pageStyles %>">
+    <% } %>
+</head>
+<body>
+
+<header>
+    <h1><%= locals.title %></h1>
+    <%- include('partials/navigation', { user: locals.user }) %> <!-- Включаем навигацию, передаем user из locals -->
+</header>
+
+<main class="container">
+    <% /* Базовый класс content всегда применяется */ %>
+    <div class="content">
+        <!-- Включаем содержимое страницы. Шаблон страницы ДОЛЖЕН содержать структуру колонок -->
+        <%- include(locals.pageTemplate, locals) %>
+    </div>
+</main>
+
+<footer>
+    <p>© Проект КБ-14 <%= new Date().getFullYear() %></p>
+    <p class="response" id="response-status">Статус ответа: Ожидание...</p>
+    <!-- Кнопка обновления списка продуктов/данных - видна только на главной и админке -->
+    <% if (locals.pageTemplate === 'pages/index' || locals.pageTemplate === 'pages/admin') { %>
+        <button class="button__refresh"> <!-- Убрал onclick, будет в script.js -->
+            <img class="refresh-icon" src="/icons/refresh-ccw.svg" alt="Обновить">
+        </button>
+    <% } %>
+</footer>
+
+<script src="/script.js"></script>
+<% if (locals.pageScripts) { %>
+    <script src="/<%= locals.pageScripts %>"></script>
+<% } %>
+</body>
+</html>

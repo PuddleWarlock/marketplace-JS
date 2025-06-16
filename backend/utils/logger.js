@@ -1,13 +1,19 @@
+// backend\utils\logger.js
 const fs = require('fs');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
-const logFilePath = path.join(__dirname, '..', 'logs', 'requests.log');
+// Убедимся, что папка logs существует
+const logDir = path.join(__dirname, '..', 'logs');
+if (!fs.existsSync(logDir)){
+    fs.mkdirSync(logDir);
+}
+const logFilePath = path.join(logDir, 'requests.log');
 
 // Middleware для логирования запросов
 const logRequest = (req, res, next) => {
     const requestId = uuidv4();
-    req.requestId = requestId;
+    req.requestId = requestId; // Присваиваем ID запросу
 
     const startTime = Date.now();
     res.on('finish', () => {
@@ -22,17 +28,24 @@ const logRequest = (req, res, next) => {
     });
 
     res.on('error', (error) => {
-        logError(req, error);
+        // При ошибке в процессе обработки запроса
+        logError(req, error); // Используем logError с req
     });
 
     next();
 };
 
-// Логирование ошибок
+// Логирование ошибок (вызывается middleware обработки ошибок или напрямую при необходимости)
 const logError = (req, error) => {
-    const errorEntry = `${new Date().toISOString()} | ID: ${req.requestId || 'N/A'} | Method: ${req.method} | URL: ${req.originalUrl} | Error: ${error.message} | Stack: ${error.stack}\n`;
+    // Проверяем наличие req и requestId
+    const requestId = req && req.requestId ? req.requestId : 'N/A';
+    const method = req ? req.method : 'N/A';
+    const url = req ? req.originalUrl : 'N/A';
 
-    fs.appendFile(logFilePath, errorEntry, (err) => {
+    const errorEntry = `${new Date().toISOString()} | ID: ${requestId} | Method: ${method} | URL: ${url} | Error: ${error.message} | Stack: ${error.stack}\n`;
+    const errorLogFilePath = path.join(logDir, 'errors.log'); // Отдельный файл для ошибок
+
+    fs.appendFile(errorLogFilePath, errorEntry, (err) => {
         if (err) {
             console.error('Error writing error log:', err);
         }

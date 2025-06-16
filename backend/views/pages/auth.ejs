@@ -1,0 +1,89 @@
+﻿<!-- backend\views\pages\auth.ejs -->
+<!-- Содержимое страницы входа и регистрации -->
+
+<% /* Этот шаблон включится внутрь <div class="content"> в layout.ejs */ %>
+
+<div class="content_side__left">
+    <!-- Блок 1: Приветственное сообщение -->
+    <section class="auth-welcome func-section__vertical"> <% /* Убран класс sticky */ %>
+        <h2>Добро пожаловать!</h2>
+        <p>Войдите, чтобы получить доступ к вашему аккаунту, или зарегистрируйтесь, чтобы стать частью нашего сообщества.</p>
+    </section>
+
+    <!-- Блок 2: Преимущества регистрации -->
+    <section class="auth-benefits func-section__vertical">
+        <h2>Почему стоит зарегистрироваться?</h2>
+        <ul>
+            <li>Доступ к эксклюзивным предложениям и скидкам.</li>
+            <li>Быстрое и удобное оформление заказов.</li>
+            <li>Сохранение истории покупок и избранных товаров.</li>
+            <li>Персонализированные рекомендации товаров.</li>
+            <li>Участие в бонусной программе.</li>
+        </ul>
+    </section>
+</div>
+<div class="content_center">
+    <!-- Блок для отображения ошибки из URL (редирект сервера) - остается вне секций, но внутри центральной колонки -->
+    <div id="page-auth-error" class="errors-display"></div>
+
+    <!-- Блок с формами (входит в центральную область по дизайну) -->
+    <section class="func-section__vertical"> <% /* Обернем формы в секцию для единообразия стилей */ %>
+        <div class="auth-forms-container">
+            <!-- Блок 3: Форма входа -->
+            <div id="login-form-container">
+                <h3>Вход</h3>
+                <form id="login-form">
+                    <label class="input-container">
+                        <span>Имя пользователя:</span>
+                        <input type="text" id="login-username" required>
+                    </label>
+                    <label class="input-container">
+                        <span>Пароль:</span>
+                        <input type="password" id="login-password" required minlength="6"> <!-- Валидация в HTML -->
+                    </label>
+                    <button type="submit">Войти</button>
+                    <div id="login-errors" class="errors-display"></div> <!-- Ошибки валидации логина -->
+                    <div id="login-success" class="success-display"></div> <!-- Добавлен div -->
+                </form>
+                <p>Нет аккаунта? <a href="#" id="show-register-link">Зарегистрироваться</a></p>
+            </div>
+
+            <!-- Блок 4: Форма регистрации (скрыта по умолчанию) -->
+            <div id="register-form-container" style="display: none;">
+                <h3>Регистрация</h3>
+                <form id="register-form">
+                    <label class="input-container">
+                        <span>Имя пользователя:</span>
+                        <input type="text" id="register-username" required>
+                    </label>
+                    <label class="input-container">
+                        <span>Пароль:</span>
+                        <input type="password" id="register-password" required minlength="6"> <!-- Валидация в HTML -->
+                    </label>
+                    <label class="input-container">
+                        <span>Повторите пароль:</span>
+                        <input type="password" id="register-password2" required minlength="6"> <!-- Валидация в HTML -->
+                    </label>
+                    <button type="submit">Зарегистрироваться</button>
+                    <div id="register-errors" class="errors-display"></div> <!-- Ошибки валидации регистрации -->
+                    <div id="register-success" class="success-display"></div> <!-- Добавлен div -->
+                </form>
+                <p>Уже есть аккаунт? <a href="#" id="show-login-link">Войти</a></p>
+            </div>
+        </div>
+    </section>
+
+</div>
+<div class="content_side__right">
+    <!-- Блок 5: Информация о конфиденциальности -->
+    <section class="auth-privacy func-section__vertical"> <% /* Убран класс sticky */ %>
+        <h2>Конфиденциальность</h2>
+        <p>Ваши данные надежно защищены. Мы используем современные методы шифрования и не передаем информацию третьим лицам без вашего согласия.</p>
+        <p><a href="#">Политика конфиденциальности</a></p>
+    </section>
+
+    <!-- Блок 6: Изображение (пример) -->
+    <section class="auth-image func-section__vertical">
+        <img src="/images/security.jpg" alt="Безопасность">
+    </section>
+</div>

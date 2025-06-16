@@ -1,0 +1,742 @@
+/* backend\public\styles.css */
+
+/* --- Общие стили --- */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f1f1f1;
+    color: #333;
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    margin-bottom: 15px;
+    color: #0056b3;
+}
+
+h1 { font-size: 2em; }
+h2 { font-size: 1.6em; }
+h3 { font-size: 1.3em; }
+
+p {
+    margin-bottom: 10px;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+/* --- Шапка --- */
+header{
+    background-color: #e9e9e9;
+    padding: 15px 20px;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    background-color: inherit;
+    margin-bottom: 10px;
+    color: #0056b3;
+}
+
+/* --- Навигация --- */
+nav ul {
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    background-color: inherit;
+    flex-wrap: wrap;
+}
+
+nav li {
+    background-color: inherit;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    background-color: inherit;
+}
+
+nav a:hover {
+    color: #fff;
+    background-color: #007bff;
+    text-decoration: none;
+}
+
+
+/* --- Основной контейнер контента --- */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px; /* Padding inside the centered container */
+}
+
+/* --- Макет контента (Grid) --- */
+/* Контейнер Grid, который находится внутри .container */
+.content {
+    display: grid;
+    /* Определяем колонки для 3-х колоночного макета - теперь всегда */
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 30px; /* Промежутки между колонками */
+    background-color: #f1f1f1; /* Фон на уровне сетки */
+    width: 100%; /* Убедимся, что сетка занимает всю ширину родителя (.container) */
+}
+
+/* Удалены правила для одноколоночных макетов */
+
+/* Стили для самих контейнеров колонок */
+.content_side__left,
+.content_center,
+.content_side__right {
+    background-color: inherit; /* Наследует фон родителя (.content) */
+    padding: 0; /* Убираем padding с самих колонок, padding будет на внутренних секциях */
+}
+
+/* Удалены правила центрирования для одноколоночных макетов */
+
+
+/* --- Стили для секций/блоков --- */
+.func-section__vertical {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    padding: 15px; /* Внутренний отступ секции */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff; /* Явный белый фон для секций */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    /* Убедимся, что секция занимает всю доступную ширину родителя (колонки) */
+    width: 100%;
+    box-sizing: border-box; /* Учитываем padding и border в ширине */
+}
+.func-section__vertical:last-child {
+    margin-bottom: 0;
+}
+
+.func-section__vertical h2,
+.func-section__vertical h3 {
+    background-color: inherit;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.func-section__vertical label span {
+    background-color: inherit;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #555;
+}
+
+/* Стили для полей ввода и текстовых областей */
+.func-section__vertical input[type="text"],
+.func-section__vertical input[type="number"],
+.func-section__vertical input[type="email"],
+.func-section__vertical input[type="password"],
+.func-section__vertical textarea {
+    border: 1px solid #ccc;
+    min-height: 40px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    padding: 8px 10px;
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+.func-section__vertical textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+
+/* --- Стили для кнопок --- */
+button{
+    border: none;
+    background-color: #007bff;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    height: 38px;
+    padding: 0 20px;
+    margin: 5px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 1em;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+button:hover{
+    background-color: #0056b3;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+button:active{
+    background-color: #003f7f;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+    color: #666;
+}
+
+button img {
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+}
+
+
+/* --- Иконки --- */
+.search-icon, .arrow-down-icon {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    background-color: transparent;
+    margin: 0 10px;
+}
+.search-icon:hover{ transform: scale(1.1); }
+.search-icon:active{ transform: scale(0.9); }
+
+.arrow-down-icon {
+    margin-right: 10px;
+    transform: rotate(0deg);
+    transition: transform 0.5s ease;
+    background-color: transparent;
+}
+.arrow-down-icon.rotated {
+    transform: rotate(180deg);
+}
+
+.trash-icon, .refresh-icon {
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+}
+
+
+/* --- Специальные блоки и формы --- */
+.search {
+    display: flex;
+    align-items: center;
+    background-color: inherit;
+    padding: 0 10px 10px 10px;
+}
+.search input {
+    flex-grow: 1;
+    margin: 0 10px 0 0;
+}
+
+.toggle-form_container {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+    background-color: inherit;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.toggle-form_container:hover {
+    background-color: #f9f9f9;
+}
+.toggle-form_container h2 {
+    margin: 0;
+    background-color: inherit;
+    flex-grow: 1;
+    font-size: 1.3em;
+    color: #333;
+}
+
+
+.hidden-form__vertical,
+.hidden-form__horizontal {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease-out;
+    padding: 0 15px; /* Padding внутри скрываемого блока */
+    background-color: inherit;
+}
+/* Убираем padding-bottom при скрытой форме */
+.hidden-form__vertical:not(.visible),
+.hidden-form__horizontal:not(.visible) {
+    padding-bottom: 0;
+}
+
+
+.hidden-form.visible {
+    max-height: 1000px; /* Достаточно большое значение для показа */
+    transition: max-height 0.5s ease-in;
+    padding-bottom: 15px; /* Возвращаем padding-bottom при показе */
+}
+
+/* Удалены sticky стили */
+
+
+/* --- Футер --- */
+footer {
+    background-color: #e9e9e9;
+    padding: 20px;
+    margin-top: 40px;
+    position: relative;
+    min-height: 60px;
+    text-align: center;
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+footer p {
+    background-color: inherit;
+    margin: 0;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.response {
+    flex-grow: 1;
+    text-align: left;
+    min-width: 250px;
+}
+
+.button__refresh {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    padding: 0;
+    background-color: #28a745;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+.button__refresh:hover { background-color: #218838; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); }
+.button__refresh:active { background-color: #1e7e34; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); }
+
+.button__refresh img {
+    transition: transform 0.5s ease;
+}
+
+.button__refresh:hover .refresh-icon {
+    transform: rotate(-180deg);
+}
+
+
+/* --- Стили для кнопки удаления --- */
+.button__delete{
+    width: auto;
+    margin-top: 10px;
+    padding: 8px 15px;
+    background-color: #dc3545;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.button__delete:hover{ background-color: #c82333; }
+.button__delete:active{ background-color: #bd2130; }
+.button__delete .trash-icon { background-color: transparent; }
+
+
+/* --- Стили для блоков информации (sidebar blocks) --- */
+.info-block {
+    /* Использует стили func-section__vertical */
+}
+.info-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px auto;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+
+/* --- Стили для отображения информации OS/File --- */
+#info-display {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #e9ecef;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 0.9em;
+    overflow-x: auto;
+}
+#info-display h3 {
+    margin-top: 0;
+    background-color: inherit;
+    color: #555;
+    font-size: 1.1em;
+}
+#info-display pre {
+    background-color: inherit;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    font-size: 0.85em;
+}
+
+
+/* --- Стили для блоков ошибок и успеха --- */
+.errors-display,
+.success-display {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+/* Правило для полного скрытия, если контента нет */
+.errors-display:empty,
+.success-display:empty {
+    padding: 0;
+    border: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    min-height: 0;
+    overflow: hidden;
+    display: none; /* Полностью скрываем пустой блок */
+}
+
+
+.errors-display {
+    border: 1px solid #f5c6cb;
+    background-color: #f8d7da;
+    color: #721c24;
+}
+.errors-display ul {
+    list-style: inside;
+    padding-left: 0;
+    background-color: inherit;
+    margin: 0;
+}
+.errors-display li {
+    margin-bottom: 5px;
+    background-color: inherit;
+}
+.errors-display li:last-child {
+    margin-bottom: 0;
+}
+
+
+.success-display {
+    border: 1px solid #c3e6cb;
+    background-color: #d4edda;
+    color: #155724;
+}
+.success-display p {
+    margin: 0;
+    background-color: inherit;
+}
+
+
+/* --- Стили для Auth, Contact, 404, Error (теперь 3 колонки) --- */
+/* Удалены специфичные правила для этих layout'ов, так как они теперь используют общий 3-х колоночный макет */
+
+/* Специальное правило для контейнера форм авторизации (теперь внутри центральной колонки) */
+.auth-forms-container {
+    max-width: 400px; /* Своя ограниченная ширина */
+    margin-left: auto;
+    margin-right: auto; /* Центрируем контейнер форм внутри секции */
+    width: 100%;
+    /* padding, border, background-color и shadow наследуются или задаются напрямую от родительской секции */
+}
+
+/* Дополнительные стили для Auth Page */
+/* Эти блоки теперь являются прямыми потомками div.content_side__left/center/right */
+/* .auth-page-layout .func-section__vertical {} */ /* Удалено */
+/* ... (остальные стили для auth-page-layout без изменений, т.к. они применяются к элементам ВНУТРИ секций) */
+
+
+/* Дополнительные стили для Contact Page */
+/* Эти блоки теперь являются прямыми потомками div.content_side__left/center/right */
+/* .contact-page-layout .contact-details p b { ... } */
+/* ... (остальные стили для contact-page-layout без изменений) */
+
+
+/* Стили для страниц 404 и ошибки */
+/* Эти блоки теперь являются прямыми потомками div.content_side__left/center/right */
+/* .not-found-page-layout section, .error-page-layout section { ... } */
+/* ... (остальные стили для 404/error без изменений) */
+
+
+/* --- Стили для списков в админке (сообщения, пользователи) --- */
+.message-item, .user-item {
+    border: 1px solid #eee;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+.message-item:last-child, .user-item:last-child {
+    margin-bottom: 0;
+}
+.message-item p, .user-item p {
+    margin: 5px 0;
+    background-color: inherit;
+    font-size: 0.95em;
+}
+.message-item p b, .user-item p b {
+    background-color: inherit;
+}
+
+.admin-menu ul {
+    list-style: none;
+    padding: 0;
+    background-color: inherit;
+}
+.admin-menu li {
+    margin-bottom: 10px;
+    background-color: inherit;
+}
+.admin-menu a {
+    color: #555;
+    font-weight: normal;
+}
+.admin-menu a:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+.admin-stats p {
+    margin-bottom: 5px;
+    background-color: inherit;
+    font-weight: bold;
+}
+.admin-stats p span {
+    font-weight: normal;
+    color: #007bff;
+    background-color: inherit;
+}
+
+
+/* Стили для списков внутри блоков (например, преимущества в auth, FAQ в contact) */
+/* Применяем только к спискам внутри секций (теперь все секции в колонках) */
+.func-section__vertical ul { /* Применяем ко всем спискам внутри секций */
+    list-style: disc; /* Маркеры списка */
+    padding-left: 20px; /* Отступ для маркеров */
+    background-color: inherit;
+}
+/* Отдельное правило для ul внутри faq-item */
+.faq-item ul { /* Это правило применяется ко всем faq-item, которые теперь в .content_center */
+    list-style: circle; /* Другой тип маркера для вложенных списков */
+    padding-left: 20px;
+}
+.func-section__vertical li { /* Применяем ко всем элементам списка внутри секций */
+    margin-bottom: 5px;
+    background-color: inherit;
+}
+
+
+/* Адаптация макета */
+@media (max-width: 1024px) {
+    /* Grid для ВСЕХ страниц */
+    /* Переключаемся на одноколоночный макет */
+    .content { /* Применяем ко всем .content */
+        grid-template-columns: 1fr; /* На узких экранах - одна колонка */
+        gap: 20px; /* Промежутки между блоками (бывшими колонками) */
+        padding: 0 15px; /* Добавим padding к самому .content для адаптивного режима */
+    }
+    /* Колонки при адаптации теперь становятся блоками в одной колонке */
+    .content_side__left,
+    .content_side__right,
+    .content_center { /* Применяем ко всем колонкам */
+        width: 100%; /* Занимают всю ширину доступную в 1fr колонке */
+        order: initial;
+        /* Убираем padding с самих колонок при переходе в адаптивный режим */
+        padding: 0;
+        max-width: none; /* Column takes full 1fr width */
+        margin: 0; /* No margin on the column div itself */
+    }
+
+    /* Центрируем содержимое секций внутри колонок при переходе в одну колонку */
+    .func-section__vertical { /* Применяем к любой секции в этом контексте */
+        max-width: 600px; /* Ограничиваем ширину блоков внутри */
+        margin-left: auto; /* Center section */
+        margin-right: auto;
+        width: 100%; /* Убедимся, что занимает доступную ширину до max-width */
+        box-sizing: border-box; /* Make sure section padding/border is included in its width */
+    }
+
+    /* Удалены sticky стили в адаптации */
+
+
+    /* Удалены специфичные правила для одноколоночных макетов в адаптации */
+
+}
+
+@media (max-width: 768px) {
+    header { padding: 10px 15px; }
+    nav ul { gap: 10px; }
+    .container { padding: 0 10px; } /* Уменьшаем padding контейнера */
+    h1 { font-size: 1.8em; }
+    h2 { font-size: 1.4em; }
+    h3 { font-size: 1.2em; }
+
+    /* Уменьшаем padding на самом .content в адаптивном режиме */
+    .content { /* Применяем ко всем .content */
+        padding: 0 10px;
+    }
+
+
+    /* Уменьшаем max-width для центрированных блоков на очень маленьких экранах */
+    .func-section__vertical { /* Применяем ко всем секциям */
+        max-width: 100%; /* Занимает всю ширину с учетом padding контейнера */
+    }
+    /* Уменьшаем внутренний padding секций */
+    .func-section__vertical {
+        padding: 10px;
+    }
+    /* Специфический padding для форм авторизации */
+    .auth-forms-container {
+        padding: 15px; /* Уменьшаем padding формы авторизации */
+    }
+    .hidden-form__vertical,
+    .hidden-form__horizontal {
+        padding: 0 10px; /* Уменьшаем padding скрываемых форм */
+    }
+    .hidden-form.visible {
+        padding-bottom: 10px;
+    }
+    .search {
+        padding: 0 5px 5px 5px;
+    }
+}
+
+
+.arrow-down-icon {
+    margin-right: 10px;
+    transform: rotate(0deg);
+    transition: transform 0.5s ease;
+    background-color: transparent;
+}
+/* Стиль для повернутой стрелки (добавляется JS) */
+.arrow-down-icon.rotated {
+    transform: rotate(180deg);
+}
+
+/* --- Стили для списков в админке (сообщения, пользователи) --- */
+/* Эти стили уже были общими, оставляем */
+.message-item, .user-item {
+    border: 1px solid #eee;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+.message-item:last-child, .user-item:last-child {
+    margin-bottom: 0;
+}
+.message-item p, .user-item p {
+    margin: 5px 0;
+    background-color: inherit;
+    font-size: 0.95em;
+}
+.message-item p b, .user-item p b {
+    background-color: inherit;
+}
+
+.admin-menu ul {
+    list-style: none;
+    padding: 0;
+    background-color: inherit;
+}
+.admin-menu li {
+    margin-bottom: 10px;
+    background-color: inherit;
+}
+.admin-menu a {
+    color: #555;
+    font-weight: normal;
+}
+.admin-menu a:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+.admin-stats p {
+    margin-bottom: 5px;
+    background-color: inherit;
+    font-weight: bold;
+}
+.admin-stats p span {
+    font-weight: normal;
+    color: #007bff;
+    background-color: inherit;
+}
+
+
+/* Стили для списков внутри блоков (например, преимущества в auth, FAQ в contact) */
+/* Применяем только к спискам внутри секций (теперь все секции в колонках) */
+.func-section__vertical ul { /* Применяем ко всем спискам внутри секций */
+    list-style: disc; /* Маркеры списка */
+    padding-left: 20px; /* Отступ для маркеров */
+    background-color: inherit;
+}
+/* Отдельное правило для ul внутри faq-item */
+.faq-item ul { /* Это правило применяется ко всем faq-item, которые теперь в .content_center */
+    list-style: circle; /* Другой тип маркера для вложенных списков */
+    padding-left: 20px;
+}
+.func-section__vertical li { /* Применяем ко всем элементам списка внутри секций */
+    margin-bottom: 5px;
+    background-color: inherit;
+}
+
+.card{
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
