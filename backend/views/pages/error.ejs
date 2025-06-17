@@ -1,0 +1,57 @@
+﻿
+<%  %>
+
+<div class="content_side__left">
+    <%  %>
+    <section class="func-section__vertical">
+        <h2>Что могло случиться?</h2>
+        <ul>
+            <li>Внутренняя ошибка сервера.</li>
+            <li>Некорректный запрос от клиента.</li>
+            <li>Запрашиваемый ресурс временно недоступен.</li>
+            <li>Проблема с базой данных или другим сервисом.</li>
+        </ul>
+    </section>
+</div>
+
+<div class="content_center">
+
+    <section class="func-section__vertical">
+        <% if (locals.errorStatus) { %>
+            <h2>Ошибка <%= locals.errorStatus %></h2>
+        <% } else { %>
+            <h2>Произошла ошибка</h2>
+        <% } %>
+
+        <p>К сожалению, при обработке вашего запроса возникла непредвиденная проблема.</p>
+
+        <img src="/images/error.jpg" alt="Произошла ошибка" class="info-image" style="max-width: 200px;">
+
+        <% if (locals.errorMessage) { %>
+            <div class="errors-display" style="display: block; text-align: center; margin-top: 20px;">
+                <p><strong>Детали ошибки:</strong> <%= locals.errorMessage %></p>
+            </div>
+        <% } %>
+    </section>
+
+
+    <section class="func-section__vertical">
+        <h3>Что можно сделать?</h3>
+        <p>Пожалуйста, попробуйте одно из следующих действий:</p>
+        <ul>
+            <li><a href="javascript:history.back()">Вернуться на предыдущую страницу</a>.</li>
+            <li>Перейти на <a href="/">главную страницу</a> сайта.</li>
+            <li>Попробовать обновить страницу через несколько минут.</li>
+            <li>Если проблема повторяется, пожалуйста, <a href="/contact">свяжитесь с нашей поддержкой</a> и опишите проблему.</li>
+        </ul>
+    </section>
+</div>
+
+<div class="content_side__right">
+    <%  %>
+    <section class="func-section__vertical">
+        <h2>Техническая информация</h2>
+        <p>Мы уже получили уведомление об этой ошибке и работаем над ее устранением.</p>
+        <p>Приносим извинения за доставленные неудобства.</p>
+    </section>
+</div>
