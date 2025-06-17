@@ -174,12 +174,13 @@ const renderProducts = (products, containerId) => {
 
 
     products.forEach((product) => {
-        const card = document.createElement('div');
-        card.className = 'card';
+        if(product.isVisible) {
+            const card = document.createElement('div');
+            card.className = 'card';
 
-        card.dataset.productId = product._id;
+            card.dataset.productId = product._id;
 
-        card.innerHTML = `
+            card.innerHTML = `
             <div class="card_content">
                 <h3>${product.name || 'Без названия'}</h3>
                 <p><b>Категория:</b> ${product.category || 'Не указано'}</p>
@@ -193,13 +194,14 @@ const renderProducts = (products, containerId) => {
         `;
 
 
-        if (containerId === 'admin-product-list') {
-            card.classList.add('interactive');
-            card.onclick = () => populateEditForm(product);
+            if (containerId === 'admin-product-list') {
+                card.classList.add('interactive');
+                card.onclick = () => populateEditForm(product);
+            }
+
+
+            productList.appendChild(card);
         }
-
-
-        productList.appendChild(card);
     });
 };
 

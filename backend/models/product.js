@@ -8,7 +8,8 @@ const productSchema = new mongoose.Schema({
     updatedAt: { type: Date, default: Date.now },
     price: { type: Number, required: true },
     category: String,
-    quantity: Number
+    quantity: Number,
+    isVisible: Boolean
 });
 
 module.exports = mongoose.model('Product', productSchema);
