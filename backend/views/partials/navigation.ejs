@@ -5,9 +5,9 @@
         <li><a href="/admin">Панель администратора</a></li>
         <li><a href="/contact">Обратная связь</a></li>
         <% if (locals.user) { %> 
-        <li><a href="#">Привет, <%= locals.user.username %></a></li>
         <li><a href="/logout">Выйти</a></li>
-        <% } else { %>
+        <li>Привет, <%= locals.user.username %></li>
+    <% } else { %>
             <li><a href="/auth">Вход / Регистрация</a></li>
         <% } %>
     </ul>
