@@ -174,7 +174,6 @@ const renderProducts = (products, containerId) => {
 
 
     products.forEach((product) => {
-        if(product.isVisible) {
             const card = document.createElement('div');
             card.className = 'card';
 
@@ -201,7 +200,6 @@ const renderProducts = (products, containerId) => {
 
 
             productList.appendChild(card);
-        }
     });
 };
 
