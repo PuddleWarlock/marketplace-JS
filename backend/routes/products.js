@@ -7,7 +7,8 @@ const {
     updateProduct,
     deleteProduct,
     sortProducts,
-    handleValidationErrors
+    handleValidationErrors,
+    getAllProductsForAdmin
 } = require('../controllers/products');
 
 const authMiddleware = require('../middlewares/auth');
@@ -15,6 +16,7 @@ const { body, param, query } = require('express-validator');
 
 const router = express.Router();
 
+router.get('/admin/all', authMiddleware, getAllProductsForAdmin);
 
 router.get('/sort', [
     query('by').optional().trim().notEmpty().withMessage('Поле сортировки не может быть пустым'),

@@ -59,6 +59,9 @@
                 <span>Количество</span>
                 <input type="number" id="quantity" placeholder="Количество" required min="0" step="1"> 
             </label>
+            <label class="input-container" style="flex-direction: row; align-items: center; gap: 10px;">
+                <input type="checkbox" id="add-isVisible" checked style="width: auto; height: auto; margin: 0;">                 <span>Показывать на главной странице</span>
+            </label>
             <button type="submit">Добавить продукт</button>
             <div id="add-form-errors" class="errors-display"></div>
             <div id="add-form-success" class="success-display"></div> 
@@ -99,6 +102,10 @@
             <label class="input-container">
                 <span>Количество</span>
                 <input type="number" id="edit-quantity" placeholder="Новое количество" min="0" step="1">
+            </label>
+            <label class="input-container" style="flex-direction: row; align-items: center; gap: 10px;">
+                <input type="checkbox" id="edit-isVisible" style="width: auto; height: auto; margin: 0;">
+                <span>Показывать на главной странице</span>
             </label>
             <button type="submit">Сохранить изменения</button>
             <div id="edit-form-errors" class="errors-display"></div>

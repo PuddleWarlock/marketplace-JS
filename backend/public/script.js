@@ -386,7 +386,7 @@ const fetchAdminProducts = async () => {
     productList.innerHTML = '<p>Загрузка продуктов для админки...</p>';
 
     try {
-        const response = await fetch(API_URL);
+        const response = await fetch(`${API_URL}/admin/all`);
         if (!response.ok) {
             const result = await response.json().catch(() => ({error: response.statusText}));
             const errorDetail = result.error || 'Неизвестная ошибка';
@@ -536,7 +536,7 @@ const populateEditForm = (product) => {
     editForm.querySelector('#edit-price').value = product.price != null ? product.price : '';
     editForm.querySelector('#edit-seller').value = product.seller || '';
     editForm.querySelector('#edit-quantity').value = product.quantity != null ? product.quantity : '';
-
+    editForm.querySelector('#edit-isVisible').checked = product.isVisible !== false;
 
     clearMessages('edit-form-errors', 'edit-form-success');
 
@@ -609,6 +609,7 @@ const handleAddProductSubmit = async (e) => {
         price: Number(addForm.querySelector('#price').value),
         seller: addForm.querySelector('#seller').value.trim(),
         quantity: Number(addForm.querySelector('#quantity').value),
+        isVisible: addForm.querySelector('#add-isVisible').checked
     };
 
 
@@ -675,6 +676,7 @@ const handleEditProductSubmit = async (e) => {
     const price = editForm.querySelector('#edit-price').value.trim();
     const seller = editForm.querySelector('#edit-seller').value.trim();
     const quantity = editForm.querySelector('#edit-quantity').value.trim();
+    updatedProduct.isVisible = editForm.querySelector('#edit-isVisible').checked;
 
 
     if (name !== '') updatedProduct.name = name;
@@ -702,10 +704,10 @@ const handleEditProductSubmit = async (e) => {
     }
 
 
-    if (Object.keys(updatedProduct).length === 0) {
+    /*if (Object.keys(updatedProduct).length === 0) {
         displayErrors('Нет полей для обновления.', 'edit-form-errors');
         return;
-    }
+    }*/
 
     try {
         const response = await fetch(`${API_URL}/${id}`, {

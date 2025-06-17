@@ -12,10 +12,19 @@ const handleValidationErrors = (req, res, next) => {
     next();
 };
 
+const getAllProductsForAdmin = async (req, res, next) => {
+    try {
+        const products = await Product.find();
+        res.status(200).json(products);
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 const getProducts = async (req, res, next) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find({isVisible:true});
         res.status(200).json(products);
     } catch (error) {
         next(error);
@@ -138,7 +147,7 @@ const sortProducts = async (req, res, next) => {
     const sortOrder = (order.toLowerCase() === 'desc' || order === '-1') ? -1 : 1;
 
     try {
-        const sortedProducts = await Product.find().sort({ [by]: sortOrder });
+        const sortedProducts = await Product.find({isVisible:true}).sort({ [by]: sortOrder });
         res.status(200).json(sortedProducts);
     } catch (error) {
         next(error);
@@ -152,5 +161,6 @@ module.exports = {
     updateProduct,
     deleteProduct,
     sortProducts,
-    handleValidationErrors
+    handleValidationErrors,
+    getAllProductsForAdmin
 };
